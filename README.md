@@ -1,6 +1,6 @@
 # todo_list
 
-A new Flutter application.
+A task management application that gives the user a reminder when the task is due
 
 ## Getting Started
 
