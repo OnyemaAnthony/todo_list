@@ -1,6 +1,4 @@
 import 'dart:io';
-
-import 'package:flutter/material.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:sqflite/sqflite.dart';
 import 'package:path/path.dart';
@@ -14,34 +12,41 @@ class DatabaseRepository {
 
   static Database _db;
 
-  DatabaseRepository.internal();
+
 
   Future<Database> get db async {
     if (_db != null) {
       return _db;
     }
     _db = await initDb();
+    return db;
   }
-
+  DatabaseRepository.internal();
   initDb() async {
     Directory documentDirectory = await getApplicationDocumentsDirectory();
+
 
     String path = join(documentDirectory.path, 'tododb.db');
 
     var dataBase = await openDatabase(path, version: 1, onCreate: _onCreate);
+    return dataBase;
   }
 
   void _onCreate(Database db, int newVersion) async {
     await db.execute(
-        "CREATE TABLE ${Utility.todoTable}(${Utility.id} INTEGER PRIMARY KEY, ${Utility.task} TEXT,${Utility.deadline}TEXT})");
+        "CREATE TABLE ${Utility.todoTable}(${Utility.id} INTEGER PRIMARY KEY, ${Utility.task} TEXT,${Utility.deadline} TEXT)");
   }
 
   Future<int> saveTask(TodoListModel todoListModel) async {
     var dbClient = await db;
+    print(dbClient == null);
 
-    int result =
-        await dbClient.insert(Utility.todoTable, todoListModel.toMap());
-    return result;
+    if(dbClient != null){
+      int result =
+      await dbClient.insert(Utility.todoTable, todoListModel.toMap());
+      return result;
+    }
+
   }
 
   Future<List> geAllTask() async {

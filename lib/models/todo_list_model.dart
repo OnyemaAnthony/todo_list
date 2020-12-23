@@ -2,7 +2,7 @@
 class TodoListModel{
   String task;
   String deadLine;
-  String id;
+  int id;
 
   TodoListModel({this.id,this.deadLine,this.task});
 
