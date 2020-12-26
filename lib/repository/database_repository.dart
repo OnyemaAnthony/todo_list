@@ -54,6 +54,8 @@ class DatabaseRepository {
 
     var result = await dbClient.rawQuery("SELECT * FROM ${Utility.todoTable}");
 
+
+
     return result.toList();
   }
 
