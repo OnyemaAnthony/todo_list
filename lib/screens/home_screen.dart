@@ -13,24 +13,24 @@ class HomeScreen extends StatefulWidget {
 class _HomeScreenState extends State<HomeScreen> {
   TaskBloc taskBloc;
 
-
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
-      create: (BuildContext context)=>TaskBloc(repository: DatabaseRepository()),
+      create: (BuildContext context) =>
+          TaskBloc(repository: DatabaseRepository())
+            ..add(FetchAllTaskEvent()),
       child: Builder(
-        builder: (BuildContext context){
-          return  Scaffold(
+        builder: (BuildContext context) {
+          return Scaffold(
             appBar: AppBar(
               title: Text('Todo List'),
               centerTitle: true,
             ),
             body: BlocBuilder(
-              builder: (context,state){
-                if(state is TaskLoadingState){
+              builder: (context, state) {
+                if (state is TaskLoadingState) {
                   return Utility.showCirclarLoader();
-                }else if(state is TaskLoadedState){
-
+                } else if (state is TaskLoadedState) {
                   return TaskList(state.task);
                 }
                 return Container();

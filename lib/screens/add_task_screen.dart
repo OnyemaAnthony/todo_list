@@ -4,6 +4,7 @@ import 'package:intl/intl.dart';
 import 'package:todo_list/bloc/task/task_bloc.dart';
 import 'package:todo_list/models/todo_list_model.dart';
 import 'package:todo_list/repository/database_repository.dart';
+import 'package:todo_list/utility/utilities.dart';
 
 class AddTaskScreen extends StatefulWidget {
   @override
@@ -32,6 +33,7 @@ class _AddTaskScreenState extends State<AddTaskScreen> {
               actions: [
                 GestureDetector(
                   onTap: () {
+                    print('hello wold');
                     saveTask(context);
                   },
                   child: Container(
@@ -43,88 +45,97 @@ class _AddTaskScreenState extends State<AddTaskScreen> {
                 )
               ],
             ),
-            body: Container(
-              margin: EdgeInsets.all(20),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text("What need to be done?"),
-                  Row(
+            body: BlocBuilder<TaskBloc,TaskState>(
+              builder: (context,state){
+                if(state is TaskInitial){
+                return Container(
+                  margin: EdgeInsets.all(20),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Expanded(
-                        child: Container(
-                          width: 400,
-                          child: TextFormField(
-                            controller: taskController,
-                            textInputAction: TextInputAction.newline,
-                            keyboardType: TextInputType.multiline,
-                            maxLines: null,
-                            decoration: InputDecoration(
-                              hintText: 'Enter Task Here',
-                              //border: OutlineInputBorder(),
+                      Text("What need to be done?"),
+                      Row(
+                        children: [
+                          Expanded(
+                            child: Container(
+                              width: 400,
+                              child: TextFormField(
+                                controller: taskController,
+                                textInputAction: TextInputAction.newline,
+                                keyboardType: TextInputType.multiline,
+                                maxLines: null,
+                                decoration: InputDecoration(
+                                  hintText: 'Enter Task Here',
+                                  //border: OutlineInputBorder(),
+                                ),
+                              ),
                             ),
                           ),
-                        ),
+                          SizedBox(
+                            width: 10,
+                          ),
+                          Icon(
+                            Icons.keyboard_voice,
+                            color: Theme.of(context).primaryColor,
+                            size: 28,
+                          ),
+                        ],
                       ),
                       SizedBox(
-                        width: 10,
+                        height: 40,
                       ),
-                      Icon(
-                        Icons.keyboard_voice,
-                        color: Theme.of(context).primaryColor,
-                        size: 28,
+                      Center(
+                          child: Text(
+                            "Dead line",
+                            style: TextStyle(fontSize: 19),
+                          )),
+                      SizedBox(
+                        height: 10,
+                      ),
+                      Row(
+                        children: [
+                          Expanded(
+                            child: Container(
+                              width: 400,
+                              child: TextFormField(
+                                onTap: () {
+                                  _showDatePicker(context);
+                                },
+                                controller: dateController,
+                                textInputAction: TextInputAction.newline,
+                                keyboardType: TextInputType.multiline,
+                                maxLines: null,
+                                decoration: InputDecoration(
+                                  hintText: 'Enter Date',
+                                  //border: OutlineInputBorder(),
+                                ),
+                              ),
+                            ),
+                          ),
+                          SizedBox(
+                            width: 10,
+                          ),
+
+                          Icon(
+                            Icons.date_range,
+                            color: Theme.of(context).primaryColor,
+                            size: 28,
+                          ),
+                          //  SizedBox(height: 10,),
+
+                          dateController.text.isEmpty
+                              ? Container()
+                              : Expanded(child: buildTime()),
+                        ],
                       ),
                     ],
                   ),
-                  SizedBox(
-                    height: 40,
-                  ),
-                  Center(
-                      child: Text(
-                    "Dead line",
-                    style: TextStyle(fontSize: 19),
-                  )),
-                  SizedBox(
-                    height: 10,
-                  ),
-                  Row(
-                    children: [
-                      Expanded(
-                        child: Container(
-                          width: 400,
-                          child: TextFormField(
-                            onTap: () {
-                              _showDatePicker(context);
-                            },
-                            controller: dateController,
-                            textInputAction: TextInputAction.newline,
-                            keyboardType: TextInputType.multiline,
-                            maxLines: null,
-                            decoration: InputDecoration(
-                              hintText: 'Enter Date',
-                              //border: OutlineInputBorder(),
-                            ),
-                          ),
-                        ),
-                      ),
-                      SizedBox(
-                        width: 10,
-                      ),
-
-                      Icon(
-                        Icons.date_range,
-                        color: Theme.of(context).primaryColor,
-                        size: 28,
-                      ),
-                      //  SizedBox(height: 10,),
-
-                      dateController.text.isEmpty
-                          ? Container()
-                          : Expanded(child: buildTime()),
-                    ],
-                  ),
-                ],
-              ),
+                );
+                }else if( state is TaskLoadingState){
+                  return Utility.showCirclarLoader();
+                }
+                return Container();
+              },
             ),
           );
         },
@@ -191,7 +202,7 @@ class _AddTaskScreenState extends State<AddTaskScreen> {
     });
   }
 
-  void saveTask(BuildContext context) {
+  saveTask(BuildContext context) {
     taskBloc = BlocProvider.of<TaskBloc>(context);
     taskBloc.add(
       SaveTaskEvent(TodoListModel(
