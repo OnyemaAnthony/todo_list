@@ -1,12 +1,15 @@
 import 'dart:ui';
 
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:todo_list/repository/database_repository.dart';
 import 'package:todo_list/screens/empty_tas_screen.dart';
 import 'package:todo_list/screens/home_screen.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]);
+
   var db = await DatabaseRepository().getCount();
   runApp(MyApp(db));
 }
