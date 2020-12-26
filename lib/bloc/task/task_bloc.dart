@@ -46,6 +46,7 @@ class TaskBloc extends Bloc<TaskEvent, TaskState> {
 
     try {
       await repository.saveTask(event.task);
+      print('task added');
     } catch (e) {
       yield TaskErrorState(e.toString());
     }

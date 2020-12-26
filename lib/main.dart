@@ -11,6 +11,7 @@ void main() async {
   SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]);
 
   var db = await DatabaseRepository().getCount();
+  print('no $db');
   runApp(MyApp(db));
 }
 
