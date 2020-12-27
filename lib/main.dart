@@ -18,7 +18,7 @@ void main() async {
   var d =  DatabaseRepository();
   TodoListModel model = TodoListModel(task: 'hello',deadLine: 'today');
   //d.saveTask(model);
-  d.deleteTask(2);
+  //d.deleteTask(0);
 
 
   print('no $db');

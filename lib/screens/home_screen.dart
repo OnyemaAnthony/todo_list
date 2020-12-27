@@ -39,9 +39,9 @@ class _HomeScreenState extends State<HomeScreen> {
       body: Container(
         child: Column(
           children: [
-            Center(
-              child: Text(todoList[0].task),
-            ),
+//            Center(
+//              child: Text(todoList[0].task),
+//            ),
 
           ],
         ),

@@ -2,26 +2,29 @@ import 'dart:async';
 
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:todo_list/models/todo_list_model.dart';
 import 'package:todo_list/repository/database_repository.dart';
+import 'package:todo_list/sqflite_reference/sqflite_reference.dart';
 
 part 'task_event.dart';
 
 part 'task_state.dart';
 
 class TaskBloc extends Bloc<TaskEvent, TaskState> {
-  DatabaseRepository repository;
+  DatabaseRepository _repository;
 
-  TaskBloc({this.repository}) : super(TaskInitial());
 
+  TaskBloc({@required DatabaseRepository repository})
+      : assert (repository != null),
+        _repository = repository,
+        super(TaskInitial());
 
   @override
   TaskState get initialState => TaskInitial();
 
   @override
-  Stream<TaskState> mapEventToState(
-    TaskEvent event,
-  ) async* {
+  Stream<TaskState> mapEventToState(TaskEvent event,) async* {
     if (event is FetchAllTaskEvent) {
       yield* _mapFetchAllTAskEventToState(event);
     } else if (event is SaveTaskEvent) {
@@ -35,7 +38,7 @@ class TaskBloc extends Bloc<TaskEvent, TaskState> {
     TodoListModel task;
 
     try {
-      List tasks = await repository.geAllTask();
+      List tasks = await _repository.geAllTask();
       for (int i = 0; i < tasks.length; i++) {
         task = TodoListModel.map(tasks[i]);
       }
@@ -50,8 +53,7 @@ class TaskBloc extends Bloc<TaskEvent, TaskState> {
     yield TaskLoadingState();
 
     try {
-      int result = await repository.saveTask(event.task);
-
+      int result = await _repository.saveTask(event.task);
 
       yield TaskAddedState(result);
     } catch (e) {

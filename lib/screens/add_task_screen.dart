@@ -44,7 +44,7 @@ class _AddTaskScreenState extends State<AddTaskScreen> {
                 )
               ],
             ),
-            body: buildTaskForm(ctx));
+            body: buildTask(ctx));
       }),
     );
   }
@@ -196,17 +196,16 @@ class _AddTaskScreenState extends State<AddTaskScreen> {
   }
 
   saveTask(BuildContext ctx) async{
-//    print('hello wold');
-//
-//    taskBloc = BlocProvider.of<TaskBloc>(ctx);
-//    taskBloc.add(
-//      SaveTaskEvent(TodoListModel(
-//          deadLine: dateController.text, task: taskController.text)),
-//    );
-//    print('hwfr');
 
-  task.task = taskController.text;
-  DatabaseRepository().saveTask(task);
+    taskBloc = BlocProvider.of<TaskBloc>(ctx);
+    taskBloc.add(
+      SaveTaskEvent(TodoListModel(
+          deadLine: 'jelof', task: taskController.text)),
+    );
+    print('hwfr');
+
+//  task.task = taskController.text;
+//  DatabaseRepository().saveTask(task);
 
   }
 
