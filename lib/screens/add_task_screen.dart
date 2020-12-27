@@ -19,6 +19,8 @@ class _AddTaskScreenState extends State<AddTaskScreen> {
   TextEditingController timeController = TextEditingController();
   final DateFormat formatter = DateFormat('dd, MMMM, yyyy');
 
+  TodoListModel task = TodoListModel(deadLine: '',task: '');
+
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
@@ -42,7 +44,7 @@ class _AddTaskScreenState extends State<AddTaskScreen> {
                 )
               ],
             ),
-            body: buildTask(ctx));
+            body: buildTaskForm(ctx));
       }),
     );
   }
@@ -188,19 +190,24 @@ class _AddTaskScreenState extends State<AddTaskScreen> {
       }
       setState(() {
         dateController.text = formatter.format(pickedDate).toString();
+        task.deadLine = dateController.text;
       });
     });
   }
 
-  saveTask(BuildContext ctx) {
-    print('hello wold');
+  saveTask(BuildContext ctx) async{
+//    print('hello wold');
+//
+//    taskBloc = BlocProvider.of<TaskBloc>(ctx);
+//    taskBloc.add(
+//      SaveTaskEvent(TodoListModel(
+//          deadLine: dateController.text, task: taskController.text)),
+//    );
+//    print('hwfr');
 
-    taskBloc = BlocProvider.of<TaskBloc>(ctx);
-    taskBloc.add(
-      SaveTaskEvent(TodoListModel(
-          deadLine: dateController.text, task: taskController.text)),
-    );
-    print('hwfr');
+  task.task = taskController.text;
+  DatabaseRepository().saveTask(task);
+
   }
 
   Widget buildTask(BuildContext context) {
