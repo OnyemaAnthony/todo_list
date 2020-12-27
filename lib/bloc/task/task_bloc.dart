@@ -32,7 +32,6 @@ class TaskBloc extends Bloc<TaskEvent, TaskState> {
   Stream<TaskState> _mapFetchAllTAskEventToState(
       FetchAllTaskEvent event) async* {
     yield TaskLoadingState();
-    print('taskloading state');
     TodoListModel task;
 
     try {

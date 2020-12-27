@@ -128,9 +128,6 @@ class _AddTaskScreenState extends State<AddTaskScreen> {
                   : Expanded(child: buildTime()),
             ],
           ),
-//          FlatButton(onPressed: (){
-//            saveTask(ctx);
-//          }, child:Text('Save')),
         ],
       ),
     );
@@ -212,7 +209,7 @@ class _AddTaskScreenState extends State<AddTaskScreen> {
         if (state is TaskInitial) {
           return buildTaskForm(ctx);
         } else if (state is TaskLoadingState) {
-          // return Utility.showCirclarLoader();
+           return Utility.showCirclarLoader();
         } else if (state is TaskAddedState) {
           return buildTaskForm(ctx);
         } else if (state is TaskErrorState) {

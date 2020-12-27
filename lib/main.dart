@@ -12,9 +12,8 @@ void main() async {
   SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]);
 
   var db = await DatabaseRepository().getCount();
-  var d = await DatabaseRepository();
+  var d =  DatabaseRepository();
   TodoListModel model = TodoListModel(task: 'hello',deadLine: 'today');
-
   //d.saveTask(model);
   d.deleteTask(2);
 
