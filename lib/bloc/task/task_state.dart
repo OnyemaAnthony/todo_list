@@ -24,6 +24,15 @@ class TaskLoadedState extends TaskState{
 
 }
 
+class TaskAddedState extends TaskState{
+   final int result;
+
+  TaskAddedState(this.result);
+  @override
+  List<Object> get props => [];
+
+}
+
 class TaskErrorState extends TaskState{
   final String message;
 

@@ -17,16 +17,16 @@ class _HomeScreenState extends State<HomeScreen> {
   Widget build(BuildContext context) {
     return BlocProvider(
       create: (BuildContext context) =>
-          TaskBloc(repository: DatabaseRepository())
-            ..add(FetchAllTaskEvent()),
+          TaskBloc(repository: DatabaseRepository()),
       child: Builder(
         builder: (BuildContext context) {
+          taskBloc = BlocProvider.of<TaskBloc>(context);
           return Scaffold(
             appBar: AppBar(
               title: Text('Todo List'),
               centerTitle: true,
             ),
-            body: BlocBuilder(
+            body: BlocBuilder<TaskBloc,TaskState>(
               builder: (context, state) {
                 if (state is TaskLoadingState) {
                   return Utility.showCirclarLoader();

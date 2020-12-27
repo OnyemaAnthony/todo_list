@@ -22,19 +22,16 @@ class _AddTaskScreenState extends State<AddTaskScreen> {
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
-      create: (BuildContext context) =>
-          TaskBloc(repository: DatabaseRepository()),
-      child: Builder(
-        builder: (BuildContext context) {
-          return Scaffold(
+      create: (BuildContext context) => TaskBloc(repository: DatabaseRepository()),
+      child: Builder(builder: (BuildContext ctx) {
+        return Scaffold(
             appBar: AppBar(
               centerTitle: true,
               title: Text('Add a new Task'),
               actions: [
                 GestureDetector(
                   onTap: () {
-                    print('hello wold');
-                    saveTask(context);
+                    saveTask(ctx);
                   },
                   child: Container(
                       margin: EdgeInsets.only(right: 20),
@@ -45,100 +42,96 @@ class _AddTaskScreenState extends State<AddTaskScreen> {
                 )
               ],
             ),
-            body: BlocBuilder<TaskBloc,TaskState>(
-              builder: (context,state){
-                if(state is TaskInitial){
-                return Container(
-                  margin: EdgeInsets.all(20),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text("What need to be done?"),
-                      Row(
-                        children: [
-                          Expanded(
-                            child: Container(
-                              width: 400,
-                              child: TextFormField(
-                                controller: taskController,
-                                textInputAction: TextInputAction.newline,
-                                keyboardType: TextInputType.multiline,
-                                maxLines: null,
-                                decoration: InputDecoration(
-                                  hintText: 'Enter Task Here',
-                                  //border: OutlineInputBorder(),
-                                ),
-                              ),
-                            ),
-                          ),
-                          SizedBox(
-                            width: 10,
-                          ),
-                          Icon(
-                            Icons.keyboard_voice,
-                            color: Theme.of(context).primaryColor,
-                            size: 28,
-                          ),
-                        ],
-                      ),
-                      SizedBox(
-                        height: 40,
-                      ),
-                      Center(
-                          child: Text(
-                            "Dead line",
-                            style: TextStyle(fontSize: 19),
-                          )),
-                      SizedBox(
-                        height: 10,
-                      ),
-                      Row(
-                        children: [
-                          Expanded(
-                            child: Container(
-                              width: 400,
-                              child: TextFormField(
-                                onTap: () {
-                                  _showDatePicker(context);
-                                },
-                                controller: dateController,
-                                textInputAction: TextInputAction.newline,
-                                keyboardType: TextInputType.multiline,
-                                maxLines: null,
-                                decoration: InputDecoration(
-                                  hintText: 'Enter Date',
-                                  //border: OutlineInputBorder(),
-                                ),
-                              ),
-                            ),
-                          ),
-                          SizedBox(
-                            width: 10,
-                          ),
+            body: buildTask(ctx));
+      }),
+    );
+  }
 
-                          Icon(
-                            Icons.date_range,
-                            color: Theme.of(context).primaryColor,
-                            size: 28,
-                          ),
-                          //  SizedBox(height: 10,),
-
-                          dateController.text.isEmpty
-                              ? Container()
-                              : Expanded(child: buildTime()),
-                        ],
-                      ),
-                    ],
+  Widget buildTaskForm(BuildContext ctx) {
+    return Container(
+      margin: EdgeInsets.all(20),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text("What need to be done?"),
+          Row(
+            children: [
+              Expanded(
+                child: Container(
+                  width: 400,
+                  child: TextFormField(
+                    controller: taskController,
+                    textInputAction: TextInputAction.newline,
+                    keyboardType: TextInputType.multiline,
+                    maxLines: null,
+                    decoration: InputDecoration(
+                      hintText: 'Enter Task Here',
+                      //border: OutlineInputBorder(),
+                    ),
                   ),
-                );
-                }else if( state is TaskLoadingState){
-                  return Utility.showCirclarLoader();
-                }
-                return Container();
-              },
-            ),
-          );
-        },
+                ),
+              ),
+              SizedBox(
+                width: 10,
+              ),
+              Icon(
+                Icons.keyboard_voice,
+                color: Theme.of(context).primaryColor,
+                size: 28,
+              ),
+            ],
+          ),
+          SizedBox(
+            height: 40,
+          ),
+          Center(
+              child: Text(
+            "Dead line",
+            style: TextStyle(fontSize: 19),
+          )),
+          SizedBox(
+            height: 10,
+          ),
+          Row(
+            children: [
+              Expanded(
+                child: Container(
+                  width: 400,
+                  child: TextFormField(
+                    onTap: () {
+                      _showDatePicker(context);
+                    },
+                    controller: dateController,
+                    textInputAction: TextInputAction.newline,
+                    keyboardType: TextInputType.multiline,
+                    maxLines: null,
+                    decoration: InputDecoration(
+                      hintText: 'Enter Date',
+                      //border: OutlineInputBorder(),
+                    ),
+                  ),
+                ),
+              ),
+              SizedBox(
+                width: 10,
+              ),
+
+              Icon(
+                Icons.date_range,
+                color: Theme.of(context).primaryColor,
+                size: 28,
+              ),
+              //  SizedBox(height: 10,),
+
+              dateController.text.isEmpty
+                  ? Container()
+                  : Expanded(child: buildTime()),
+            ],
+          ),
+//          FlatButton(onPressed: (){
+//            saveTask(ctx);
+//          }, child:Text('Save')),
+        ],
       ),
     );
   }
@@ -202,11 +195,31 @@ class _AddTaskScreenState extends State<AddTaskScreen> {
     });
   }
 
-  saveTask(BuildContext context) {
-    taskBloc = BlocProvider.of<TaskBloc>(context);
+  saveTask(BuildContext ctx) {
+    print('hello wold');
+
+    taskBloc = BlocProvider.of<TaskBloc>(ctx);
     taskBloc.add(
       SaveTaskEvent(TodoListModel(
           deadLine: dateController.text, task: taskController.text)),
+    );
+    print('hwfr');
+  }
+
+  Widget buildTask(BuildContext context) {
+    return BlocBuilder<TaskBloc, TaskState>(
+      builder: (ctx, state) {
+        if (state is TaskInitial) {
+          return buildTaskForm(ctx);
+        } else if (state is TaskLoadingState) {
+          // return Utility.showCirclarLoader();
+        } else if (state is TaskAddedState) {
+          return buildTaskForm(ctx);
+        } else if (state is TaskErrorState) {
+          //return Utility.showLongErrorToast(state.message);
+        }
+        return Container();
+      },
     );
   }
 }

@@ -6,6 +6,9 @@ class TaskList extends StatelessWidget {
   TaskList(this.task);
   @override
   Widget build(BuildContext context) {
-    return Text(task.task);
+    return Center(child: Text(task.task,style: TextStyle(
+      fontSize: 30,
+      color: Colors.red
+    ),));
   }
 }

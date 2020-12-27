@@ -2,6 +2,7 @@ import 'dart:ui';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:todo_list/models/todo_list_model.dart';
 import 'package:todo_list/repository/database_repository.dart';
 import 'package:todo_list/screens/empty_tas_screen.dart';
 import 'package:todo_list/screens/home_screen.dart';
@@ -11,6 +12,13 @@ void main() async {
   SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]);
 
   var db = await DatabaseRepository().getCount();
+  var d = await DatabaseRepository();
+  TodoListModel model = TodoListModel(task: 'hello',deadLine: 'today');
+
+  //d.saveTask(model);
+  d.deleteTask(2);
+
+
   print('no $db');
   runApp(MyApp(db));
 }
@@ -27,7 +35,7 @@ class MyApp extends StatelessWidget {
       title: 'Todo List',
       theme: ThemeData(
         primarySwatch: Colors.blue,
-        visualDensity: VisualDensity.adaptivePlatformDensity,
+       // visualDensity: VisualDensity.adaptivePlatformDensity,
       ),
       home: count <= 0 ? EmptyTaskScreen() : HomeScreen(),
     );

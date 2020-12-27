@@ -6,11 +6,11 @@ import 'package:todo_list/models/todo_list_model.dart';
 import 'package:todo_list/utility/utilities.dart';
 
 class DatabaseRepository {
-  static final DatabaseRepository _instance = DatabaseRepository.internal();
+  //static final DatabaseRepository _instance = DatabaseRepository.internal();
 
-  factory DatabaseRepository() => _instance;
+  //factory DatabaseRepository() => _instance;
 
-  static Database _db;
+   Database _db;
 
 
 
@@ -21,8 +21,8 @@ class DatabaseRepository {
     _db = await initDb();
     return db;
   }
-  DatabaseRepository.internal();
-  initDb() async {
+ // DatabaseRepository.internal();
+ Future<Database>  initDb() async {
     Directory documentDirectory = await getApplicationDocumentsDirectory();
 
 
@@ -39,13 +39,10 @@ class DatabaseRepository {
 
   Future<int> saveTask(TodoListModel todoListModel) async {
     var dbClient = await db;
-    print(dbClient == null);
+    int result =
+    await dbClient.insert(Utility.todoTable, todoListModel.toMap());
+    return result;
 
-    if(dbClient != null){
-      int result =
-      await dbClient.insert(Utility.todoTable, todoListModel.toMap());
-      return result;
-    }
 
   }
 

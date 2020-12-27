@@ -14,6 +14,10 @@ class TaskBloc extends Bloc<TaskEvent, TaskState> {
 
   TaskBloc({this.repository}) : super(TaskInitial());
 
+
+  @override
+  TaskState get initialState => TaskInitial();
+
   @override
   Stream<TaskState> mapEventToState(
     TaskEvent event,
@@ -28,6 +32,7 @@ class TaskBloc extends Bloc<TaskEvent, TaskState> {
   Stream<TaskState> _mapFetchAllTAskEventToState(
       FetchAllTaskEvent event) async* {
     yield TaskLoadingState();
+    print('taskloading state');
     TodoListModel task;
 
     try {
@@ -42,11 +47,14 @@ class TaskBloc extends Bloc<TaskEvent, TaskState> {
   }
 
   Stream<TaskState> _mapSaveTaskEventToState(SaveTaskEvent event) async* {
+    print('task added');
     yield TaskLoadingState();
 
     try {
-      await repository.saveTask(event.task);
-      print('task added');
+      int result = await repository.saveTask(event.task);
+
+
+      yield TaskAddedState(result);
     } catch (e) {
       yield TaskErrorState(e.toString());
     }
