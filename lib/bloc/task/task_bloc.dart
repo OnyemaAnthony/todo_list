@@ -28,8 +28,8 @@ class TaskBloc extends Bloc<TaskEvent, TaskState> {
       yield* _mapFetchAllTAskEventToState(event);
     } else if (event is SaveTaskEvent) {
       yield* _mapSaveTaskEventToState(event);
-    }else if(event is GetCountEvent){
-      yield* _map
+    } else if (event is GetCountEvent) {
+      yield* _mapGetCountEventToState(event);
     }
   }
 
@@ -49,11 +49,21 @@ class TaskBloc extends Bloc<TaskEvent, TaskState> {
   Stream<TaskState> _mapSaveTaskEventToState(SaveTaskEvent event) async* {
     yield TaskLoadingState();
 
-
     try {
       int result = await _repository.saveTask(event.task);
 
       yield TaskAddedState(result);
+    } catch (e) {
+      yield TaskErrorState(e.toString());
+    }
+  }
+
+  Stream<TaskState> _mapGetCountEventToState(GetCountEvent event) async* {
+    yield TaskLoadingState();
+
+    try {
+      int count = await _repository.getCount();
+      yield CountLoadedState(count);
     } catch (e) {
       yield TaskErrorState(e.toString());
     }

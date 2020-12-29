@@ -11,7 +11,7 @@ class EmptyTaskScreen extends StatelessWidget {
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () {
-          Navigator.of(context).push(
+          Navigator.of(context).pushReplacement(
             MaterialPageRoute(
               builder: (_) => AddTaskScreen(),
             ),
