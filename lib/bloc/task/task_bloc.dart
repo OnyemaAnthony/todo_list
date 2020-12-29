@@ -35,13 +35,9 @@ class TaskBloc extends Bloc<TaskEvent, TaskState> {
     FetchAllTaskEvent event,
   ) async* {
     yield TaskLoadingState();
-    TodoListModel task;
 
     try {
-      List tasks = await _repository.geAllTask();
-      for (int i = 0; i < tasks.length; i++) {
-        task = TodoListModel.map(tasks[i]);
-      }
+      List<TodoListModel> task = await _repository.geAllTask();
       yield TaskLoadedState(task);
     } catch (e) {
       yield TaskErrorState(e.toString());
@@ -50,6 +46,7 @@ class TaskBloc extends Bloc<TaskEvent, TaskState> {
 
   Stream<TaskState> _mapSaveTaskEventToState(SaveTaskEvent event) async* {
     yield TaskLoadingState();
+
 
     try {
       int result = await _repository.saveTask(event.task);

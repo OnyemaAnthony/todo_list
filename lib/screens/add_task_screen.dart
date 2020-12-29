@@ -19,7 +19,7 @@ class _AddTaskScreenState extends State<AddTaskScreen> {
   TextEditingController timeController = TextEditingController();
   final DateFormat formatter = DateFormat('dd, MMMM, yyyy');
 
-  // TodoListModel task = TodoListModel(deadLine: '', task: '');
+  final _formKey = GlobalKey<FormState>();
 
   @override
   Widget build(BuildContext context) {
@@ -58,86 +58,92 @@ class _AddTaskScreenState extends State<AddTaskScreen> {
   Widget buildTaskForm(BuildContext ctx) {
     return Container(
       margin: EdgeInsets.all(20),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Text("What need to be done?"),
-          Row(
-            children: [
-              Expanded(
-                child: Container(
-                  width: 400,
-                  child: TextFormField(
-                    controller: taskController,
-                    textInputAction: TextInputAction.newline,
-                    keyboardType: TextInputType.multiline,
-                    maxLines: null,
-                    decoration: InputDecoration(
-                      hintText: 'Enter Task Here',
-                      //border: OutlineInputBorder(),
+      child: Form(
+        key: _formKey,
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text("What need to be done?"),
+            Row(
+              children: [
+                Expanded(
+                  child: Container(
+                    width: 400,
+                    child: TextFormField(
+                      controller: taskController,
+                      validator: (input) =>
+                          input.isEmpty ? 'Please Enter a valid task' : null,
+                      textInputAction: TextInputAction.newline,
+                      keyboardType: TextInputType.multiline,
+                      maxLines: null,
+                      decoration: InputDecoration(
+                        hintText: 'Enter Task Here',
+                        //border: OutlineInputBorder(),
+                      ),
                     ),
                   ),
                 ),
-              ),
-              SizedBox(
-                width: 10,
-              ),
-              Icon(
-                Icons.keyboard_voice,
-                color: Theme.of(context).primaryColor,
-                size: 28,
-              ),
-            ],
-          ),
-          SizedBox(
-            height: 40,
-          ),
-          Center(
-            child: Text(
-              "Dead line",
-              style: TextStyle(fontSize: 19),
+                SizedBox(
+                  width: 10,
+                ),
+                Icon(
+                  Icons.keyboard_voice,
+                  color: Theme.of(context).primaryColor,
+                  size: 28,
+                ),
+              ],
             ),
-          ),
-          SizedBox(
-            height: 10,
-          ),
-          Row(
-            children: [
-              Expanded(
-                child: Container(
-                  width: 400,
-                  child: TextFormField(
-                    onTap: () {
-                      _showDatePicker(context);
-                    },
-                    controller: dateController,
-                    textInputAction: TextInputAction.newline,
-                    keyboardType: TextInputType.multiline,
-                    maxLines: null,
-                    decoration: InputDecoration(
-                      hintText: 'Enter Date',
-                      //border: OutlineInputBorder(),
+            SizedBox(
+              height: 40,
+            ),
+            dateController.text.isNotEmpty
+                ? Center(
+                    child: Text(
+                      "Dead line",
+                      style: TextStyle(fontSize: 19),
+                    ),
+                  )
+                : Text('Dead line'),
+            SizedBox(
+              height: 10,
+            ),
+            Row(
+              children: [
+                Expanded(
+                  child: Container(
+                    width: 400,
+                    child: TextFormField(
+                      validator: (input) =>
+                          input.isEmpty ? 'Please Enter a valid date' : null,
+                      onTap: () {
+                        _showDatePicker(context);
+                      },
+                      controller: dateController,
+                      textInputAction: TextInputAction.newline,
+                      keyboardType: TextInputType.multiline,
+                      maxLines: null,
+                      decoration: InputDecoration(
+                        hintText: 'Enter Date',
+                        //border: OutlineInputBorder(),
+                      ),
                     ),
                   ),
                 ),
-              ),
-              SizedBox(
-                width: 10,
-              ),
-
-              Icon(
-                Icons.date_range,
-                color: Theme.of(context).primaryColor,
-                size: 28,
-              ),
-              //  SizedBox(height: 10,),
-
-              dateController.text.isEmpty
-                  ? Container()
-                  : Expanded(child: buildTime()),
-            ],
-          ),
-        ],
+                SizedBox(
+                  width: MediaQuery.of(context).size.width * 0.01,
+                ),
+                Icon(
+                  Icons.date_range,
+                  color: Theme.of(context).primaryColor,
+                  size: 28,
+                ),
+                dateController.text.isEmpty
+                    ? Container()
+                    : Expanded(child: buildTime()),
+              ],
+            ),
+          ],
+        ),
       ),
     );
   }
@@ -149,6 +155,8 @@ class _AddTaskScreenState extends State<AddTaskScreen> {
           child: Container(
             width: 400,
             child: TextFormField(
+              validator: (input) =>
+                  input.isEmpty ? "Enter a valid time" : null,
               onTap: () {
                 _selectTime(context);
               },
@@ -197,20 +205,21 @@ class _AddTaskScreenState extends State<AddTaskScreen> {
       }
       setState(() {
         dateController.text = formatter.format(pickedDate).toString();
-        //task.deadLine = dateController.text;
       });
     });
   }
 
   saveTask(BuildContext ctx) async {
-    ctx.read<TaskBloc>().add(
-          SaveTaskEvent(
-            TodoListModel(
-              deadLine: dateController.text,
-              task: taskController.text,
+    if (_formKey.currentState.validate()) {
+      ctx.read<TaskBloc>().add(
+            SaveTaskEvent(
+              TodoListModel(
+                deadLine: dateController.text,
+                task: taskController.text,
+              ),
             ),
-          ),
-        );
+          );
+    }
   }
 
   Widget buildTask(BuildContext context) {

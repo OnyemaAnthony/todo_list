@@ -12,7 +12,7 @@ class TaskInitial extends TaskState {}
 class TaskLoadingState extends TaskState {}
 
 class TaskLoadedState extends TaskState {
-  final TodoListModel task;
+  final List<TodoListModel> task;
 
   TaskLoadedState(this.task);
   @override
