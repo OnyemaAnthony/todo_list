@@ -4,8 +4,6 @@ import 'package:todo_list/sqflite_reference/sqflite_reference.dart';
 import 'package:todo_list/utility/utilities.dart';
 
 class DatabaseRepository {
-
-
   Future<int> saveTask(TodoListModel todoListModel) async {
     var dbClient = await SqfLiteReference().db;
     int result =
@@ -16,7 +14,9 @@ class DatabaseRepository {
   Future<List> geAllTask() async {
     var dbClient = await SqfLiteReference().db;
 
-    var result = await dbClient.rawQuery("SELECT * FROM ${Utility.todoTable}");
+    var result = await dbClient.rawQuery(
+      "SELECT * FROM ${Utility.todoTable}",
+    );
 
     return result.toList();
   }

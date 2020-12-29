@@ -19,15 +19,17 @@ class _AddTaskScreenState extends State<AddTaskScreen> {
   TextEditingController timeController = TextEditingController();
   final DateFormat formatter = DateFormat('dd, MMMM, yyyy');
 
- // TodoListModel task = TodoListModel(deadLine: '', task: '');
+  // TodoListModel task = TodoListModel(deadLine: '', task: '');
 
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
-      create: (BuildContext context) =>
-          TaskBloc(repository: DatabaseRepository()),
-      child: Builder(builder: (BuildContext ctx) {
-        return Scaffold(
+      create: (_) => TaskBloc(
+        repository: DatabaseRepository(),
+      ),
+      child: Builder(
+        builder: (BuildContext ctx) {
+          return Scaffold(
             appBar: AppBar(
               centerTitle: true,
               title: Text('Add a new Task'),
@@ -37,16 +39,19 @@ class _AddTaskScreenState extends State<AddTaskScreen> {
                     saveTask(ctx);
                   },
                   child: Container(
-                      margin: EdgeInsets.only(right: 20),
-                      child: Icon(
-                        Icons.check,
-                        size: 30,
-                      )),
+                    margin: EdgeInsets.only(right: 20),
+                    child: Icon(
+                      Icons.check,
+                      size: 30,
+                    ),
+                  ),
                 )
               ],
             ),
-            body: buildTask(ctx));
-      }),
+            body: buildTask(ctx),
+          );
+        },
+      ),
     );
   }
 
@@ -88,10 +93,11 @@ class _AddTaskScreenState extends State<AddTaskScreen> {
             height: 40,
           ),
           Center(
-              child: Text(
-            "Dead line",
-            style: TextStyle(fontSize: 19),
-          )),
+            child: Text(
+              "Dead line",
+              style: TextStyle(fontSize: 19),
+            ),
+          ),
           SizedBox(
             height: 10,
           ),
@@ -197,11 +203,14 @@ class _AddTaskScreenState extends State<AddTaskScreen> {
   }
 
   saveTask(BuildContext ctx) async {
-    taskBloc = BlocProvider.of<TaskBloc>(ctx);
-    taskBloc.add(
-      SaveTaskEvent(TodoListModel(
-          deadLine: dateController.text, task: taskController.text)),
-    );
+    ctx.read<TaskBloc>().add(
+          SaveTaskEvent(
+            TodoListModel(
+              deadLine: dateController.text,
+              task: taskController.text,
+            ),
+          ),
+        );
   }
 
   Widget buildTask(BuildContext context) {

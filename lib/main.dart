@@ -15,11 +15,10 @@ void main() async {
   SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]);
 
   var db = await DatabaseRepository().getCount();
-  var d =  DatabaseRepository();
-  TodoListModel model = TodoListModel(task: 'hello',deadLine: 'today');
+  var d = DatabaseRepository();
+  TodoListModel model = TodoListModel(task: 'hello', deadLine: 'today');
   //d.saveTask(model);
   //d.deleteTask(0);
-
 
   print('no $db');
   runApp(MyApp(db));
@@ -37,7 +36,7 @@ class MyApp extends StatelessWidget {
       title: 'Todo List',
       theme: ThemeData(
         primarySwatch: Colors.blue,
-       // visualDensity: VisualDensity.adaptivePlatformDensity,
+        // visualDensity: VisualDensity.adaptivePlatformDensity,
       ),
       home: count <= 0 ? EmptyTaskScreen() : HomeScreen(),
     );

@@ -5,7 +5,6 @@ import 'dart:io';
 import 'package:path/path.dart';
 
 class SqfLiteReference {
-
   static final SqfLiteReference _instance = SqfLiteReference.internal();
 
   factory SqfLiteReference() => _instance;
@@ -19,7 +18,7 @@ class SqfLiteReference {
     return db;
   }
 
-   SqfLiteReference.internal();
+  SqfLiteReference.internal();
   Future<Database> initDb() async {
     Directory documentDirectory = await getApplicationDocumentsDirectory();
 
@@ -31,6 +30,7 @@ class SqfLiteReference {
 
   void _onCreate(Database db, int newVersion) async {
     await db.execute(
-        "CREATE TABLE ${Utility.todoTable}(${Utility.id} INTEGER PRIMARY KEY, ${Utility.task} TEXT,${Utility.deadline} TEXT)");
+      "CREATE TABLE ${Utility.todoTable}(${Utility.id} INTEGER PRIMARY KEY, ${Utility.task} TEXT,${Utility.deadline} TEXT)",
+    );
   }
 }
