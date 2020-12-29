@@ -218,6 +218,7 @@ class _AddTaskScreenState extends State<AddTaskScreen> {
                 task: taskController.text,
               ),
             ),
+
           );
     }
   }
