@@ -1,11 +1,9 @@
 import 'dart:async';
-
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:todo_list/models/todo_list_model.dart';
 import 'package:todo_list/repository/database_repository.dart';
-import 'package:todo_list/sqflite_reference/sqflite_reference.dart';
 
 part 'task_event.dart';
 
@@ -49,7 +47,6 @@ class TaskBloc extends Bloc<TaskEvent, TaskState> {
   }
 
   Stream<TaskState> _mapSaveTaskEventToState(SaveTaskEvent event) async* {
-    print('task added');
     yield TaskLoadingState();
 
     try {

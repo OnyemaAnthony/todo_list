@@ -19,12 +19,13 @@ class _AddTaskScreenState extends State<AddTaskScreen> {
   TextEditingController timeController = TextEditingController();
   final DateFormat formatter = DateFormat('dd, MMMM, yyyy');
 
-  TodoListModel task = TodoListModel(deadLine: '',task: '');
+ // TodoListModel task = TodoListModel(deadLine: '', task: '');
 
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
-      create: (BuildContext context) => TaskBloc(repository: DatabaseRepository()),
+      create: (BuildContext context) =>
+          TaskBloc(repository: DatabaseRepository()),
       child: Builder(builder: (BuildContext ctx) {
         return Scaffold(
             appBar: AppBar(
@@ -190,23 +191,17 @@ class _AddTaskScreenState extends State<AddTaskScreen> {
       }
       setState(() {
         dateController.text = formatter.format(pickedDate).toString();
-        task.deadLine = dateController.text;
+        //task.deadLine = dateController.text;
       });
     });
   }
 
-  saveTask(BuildContext ctx) async{
-
+  saveTask(BuildContext ctx) async {
     taskBloc = BlocProvider.of<TaskBloc>(ctx);
     taskBloc.add(
       SaveTaskEvent(TodoListModel(
-          deadLine: 'jelof', task: taskController.text)),
+          deadLine: dateController.text, task: taskController.text)),
     );
-    print('hwfr');
-
-//  task.task = taskController.text;
-//  DatabaseRepository().saveTask(task);
-
   }
 
   Widget buildTask(BuildContext context) {
@@ -215,7 +210,7 @@ class _AddTaskScreenState extends State<AddTaskScreen> {
         if (state is TaskInitial) {
           return buildTaskForm(ctx);
         } else if (state is TaskLoadingState) {
-           return Utility.showCirclarLoader();
+          return Utility.showCirclarLoader();
         } else if (state is TaskAddedState) {
           return buildTaskForm(ctx);
         } else if (state is TaskErrorState) {
