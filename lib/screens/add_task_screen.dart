@@ -4,9 +4,13 @@ import 'package:intl/intl.dart';
 import 'package:todo_list/bloc/task/task_bloc.dart';
 import 'package:todo_list/models/todo_list_model.dart';
 import 'package:todo_list/repository/database_repository.dart';
+import 'package:todo_list/screens/home_screen.dart';
 import 'package:todo_list/utility/utilities.dart';
 
 class AddTaskScreen extends StatefulWidget {
+  final TodoListModel todo;
+
+  AddTaskScreen([this.todo]);
   @override
   _AddTaskScreenState createState() => _AddTaskScreenState();
 }
@@ -20,6 +24,16 @@ class _AddTaskScreenState extends State<AddTaskScreen> {
   final DateFormat formatter = DateFormat('dd, MMMM, yyyy');
 
   final _formKey = GlobalKey<FormState>();
+
+  @override
+  void initState() {
+    if(widget.todo != null){
+      dateController.text = widget.todo.deadLine;
+      taskController.text = widget.todo.task;
+    }
+
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -220,6 +234,8 @@ class _AddTaskScreenState extends State<AddTaskScreen> {
             ),
 
           );
+
+      Navigator.of(context).push(MaterialPageRoute(builder: (_)=>HomeScreen()));
     }
   }
 
@@ -233,7 +249,7 @@ class _AddTaskScreenState extends State<AddTaskScreen> {
         } else if (state is TaskAddedState) {
           return buildTaskForm(ctx);
         } else if (state is TaskErrorState) {
-          //return Utility.showLongErrorToast(state.message);
+          return Utility.showErrorMessage(state.message);
         }
         return Container();
       },

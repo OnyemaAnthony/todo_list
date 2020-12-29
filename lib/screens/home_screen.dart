@@ -39,9 +39,7 @@ class _HomeScreenState extends State<HomeScreen> {
               body: BlocBuilder<TaskBloc, TaskState>(
                 builder: (context, state) {
                   if (state is TaskLoadedState) {
-                    return Center(
-                      child: Text(state.task[0].task),
-                    );
+                    return buildTaskList(state.task);
                   }
                   return Container();
                 },
@@ -49,5 +47,41 @@ class _HomeScreenState extends State<HomeScreen> {
         },
       ),
     );
+  }
+
+  Widget buildTaskList(List<TodoListModel> task) {
+    return ListView.builder(
+        itemCount: task.length,
+        itemBuilder: (context, index) {
+          TodoListModel todo = task[index];
+          return Container(
+            padding: const EdgeInsets.all(12.0),
+            child: Material(
+              elevation: 4.0,
+              child: InkWell(
+                onTap: () {
+                  Navigator.of(context).push(MaterialPageRoute(builder: (_)=> AddTaskScreen(todo)));
+                },
+                child: Container(
+                  //height: double.parse(todo.task.length.toString()),
+
+                  child: Row(
+                    children: <Widget>[
+                      ClipRRect(
+                        child: Container(width: 5, color: Colors.red),
+                      ),
+                      Checkbox(value: false, onChanged: null),
+                      Expanded(
+                        child: Text(
+                          todo.task,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+            ),
+          );
+        });
   }
 }

@@ -28,6 +28,8 @@ class TaskBloc extends Bloc<TaskEvent, TaskState> {
       yield* _mapFetchAllTAskEventToState(event);
     } else if (event is SaveTaskEvent) {
       yield* _mapSaveTaskEventToState(event);
+    }else if(event is GetCountEvent){
+      yield* _map
     }
   }
 

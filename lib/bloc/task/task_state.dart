@@ -19,6 +19,12 @@ class TaskLoadedState extends TaskState {
   List<Object> get props => [task];
 }
 
+class DbCountLoadedState extends TaskState{
+  final int count;
+
+  DbCountLoadedState(this.count);
+}
+
 class TaskAddedState extends TaskState {
   final int result;
 

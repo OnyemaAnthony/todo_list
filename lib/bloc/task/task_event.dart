@@ -20,3 +20,6 @@ class SaveTaskEvent extends TaskEvent {
   @override
   String toString() => task.toString();
 }
+class GetCountEvent extends TaskEvent{
+
+}

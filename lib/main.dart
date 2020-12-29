@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:todo_list/bloc/simple_bloc_observer.dart';
+import 'package:todo_list/bloc/task/task_bloc.dart';
 import 'package:todo_list/models/todo_list_model.dart';
 import 'package:todo_list/repository/database_repository.dart';
 import 'package:todo_list/screens/empty_tas_screen.dart';
@@ -16,7 +17,6 @@ void main() async {
 
   var db = await DatabaseRepository().getCount();
   var d = DatabaseRepository();
-  TodoListModel model = TodoListModel(task: 'hello', deadLine: 'today');
   //d.saveTask(model);
   //d.deleteTask(0);
 
@@ -31,14 +31,16 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      debugShowCheckedModeBanner: false,
-      title: 'Todo List',
-      theme: ThemeData(
-        primarySwatch: Colors.blue,
-        // visualDensity: VisualDensity.adaptivePlatformDensity,
+    return BlocProvider(
+      create: (BuildContext context)=>TaskBloc(repository: DatabaseRepository()),
+      child: MaterialApp(
+        debugShowCheckedModeBanner: false,
+        title: 'Todo List',
+        theme: ThemeData(
+          primarySwatch: Colors.blue,
+        ),
+        home: count <= 0 ? EmptyTaskScreen() : HomeScreen(),
       ),
-      home: count <= 0 ? EmptyTaskScreen() : HomeScreen(),
     );
   }
 }

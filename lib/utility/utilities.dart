@@ -6,6 +6,7 @@ class Utility {
   static String id = 'id';
   static String task = 'task';
   static String deadline = 'deadLine';
+  static String deadLineTime = 'time';
 
   static void showLongErrorToast(String msg) {
     Fluttertoast.showToast(
@@ -20,6 +21,15 @@ class Utility {
   static Center showCirclarLoader() {
     return Center(
       child: CircularProgressIndicator(),
+    );
+  }
+
+  static Center showErrorMessage(String message){
+    return Center(
+      child: Text(message,style: TextStyle(
+        color: Colors.black,
+        fontSize: 16
+      ),),
     );
   }
 }
