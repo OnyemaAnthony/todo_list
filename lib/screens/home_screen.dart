@@ -4,6 +4,7 @@ import 'package:todo_list/bloc/task/task_bloc.dart';
 import 'package:todo_list/models/todo_list_model.dart';
 import 'package:todo_list/repository/database_repository.dart';
 import 'package:todo_list/screens/add_task_screen.dart';
+import 'package:todo_list/utility/utilities.dart';
 
 class HomeScreen extends StatefulWidget {
   @override
@@ -11,8 +12,8 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
-  final List<TodoListModel> todoList = <TodoListModel>[];
   TaskBloc taskBloc;
+  bool isChecked = false;
 
   @override
   Widget build(BuildContext context) {
@@ -28,7 +29,7 @@ class _HomeScreenState extends State<HomeScreen> {
               ),
               floatingActionButton: FloatingActionButton(
                 onPressed: () {
-                  Navigator.of(context).push(
+                  Navigator.of(context).pushReplacement(
                     MaterialPageRoute(
                       builder: (_) => AddTaskScreen(),
                     ),
@@ -40,6 +41,10 @@ class _HomeScreenState extends State<HomeScreen> {
                 builder: (context, state) {
                   if (state is TaskLoadedState) {
                     return buildTaskList(state.task);
+                  } else if (state is TaskLoadingState) {
+                    return Utility.showCirclarLoader();
+                  } else if (state is TaskErrorState) {
+                    return Utility.showErrorMessage(state.message);
                   }
                   return Container();
                 },
@@ -54,13 +59,15 @@ class _HomeScreenState extends State<HomeScreen> {
         itemCount: task.length,
         itemBuilder: (context, index) {
           TodoListModel todo = task[index];
+          print(todo.id);
           return Container(
             padding: const EdgeInsets.all(12.0),
             child: Material(
               elevation: 4.0,
               child: InkWell(
                 onTap: () {
-                  Navigator.of(context).push(MaterialPageRoute(builder: (_)=> AddTaskScreen(todo)));
+                  Navigator.of(context).push(
+                      MaterialPageRoute(builder: (_) => AddTaskScreen(todo)));
                 },
                 child: Container(
                   //height: double.parse(todo.task.length.toString()),
@@ -70,7 +77,17 @@ class _HomeScreenState extends State<HomeScreen> {
                       ClipRRect(
                         child: Container(width: 5, color: Colors.red),
                       ),
-                      Checkbox(value: false, onChanged: null),
+                      Checkbox(
+                          value: isChecked,
+                          onChanged: (val) {
+                            taskBloc = BlocProvider.of<TaskBloc>(context);
+
+                            setState(() {
+                              isChecked = val;
+
+                              taskBloc.add(DeleteTaskEvent(todo.id));
+                            });
+                          }),
                       Expanded(
                         child: Text(
                           todo.task,
@@ -83,5 +100,28 @@ class _HomeScreenState extends State<HomeScreen> {
             ),
           );
         });
+    bool rememberMe = false;
+
+    void _onRememberMeChanged(bool newValue) => setState(() {
+          rememberMe = newValue;
+
+          if (rememberMe) {
+            // TODO: Here goes your functionality that remembers the user.
+          } else {
+            // TODO: Forget the user
+          }
+        });
+
+    @override
+    Widget build(BuildContext context) {
+      return Checkbox(value: rememberMe, onChanged: _onRememberMeChanged);
+    }
+  }
+
+  void deleteCheckBox(bool newValue) {
+    setState(() {
+      isChecked = newValue;
+    });
+    if (isChecked) {}
   }
 }

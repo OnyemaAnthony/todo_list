@@ -16,22 +16,14 @@ void main() async {
   Bloc.observer = SimpleBlocObserver();
   SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]);
 
-  var db = await DatabaseRepository().getCount();
-  var d = DatabaseRepository();
-  //d.saveTask(model);
-  //d.deleteTask(0);
 
-  print('no $db');
   runApp(BlocProvider(
       create: (BuildContext context)=>TaskBloc(repository: DatabaseRepository())..add(GetCountEvent()),
-      child: MyApp(db)));
+      child: MyApp()));
 }
 
 
 class MyApp extends StatefulWidget {
-  final int count;
-
-  MyApp(this.count);
 
   @override
   _MyAppState createState() => _MyAppState();
@@ -49,7 +41,7 @@ class _MyAppState extends State<MyApp> {
      home: BlocBuilder<TaskBloc,TaskState>(
        builder: (context,state){
          if(state is TaskLoadingState){
-           return Utility.showCirclarLoader();
+           //return Utility.showCirclarLoader();
          }else if(state is CountLoadedState){
           return state.count <=0 ? EmptyTaskScreen(): HomeScreen();
          }else if(state is TaskErrorState){
@@ -59,7 +51,6 @@ class _MyAppState extends State<MyApp> {
 
        },
      ),
-     // home: count <= 0 ? EmptyTaskScreen() : HomeScreen(),
     );
   }
 }

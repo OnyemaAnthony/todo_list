@@ -5,7 +5,7 @@ class TodoListModel extends Equatable {
   String deadLine;
   int id;
 
-  TodoListModel({this.deadLine, this.task});
+  TodoListModel({this.id,this.deadLine, this.task});
 
   TodoListModel.map(dynamic obj) {
     this.task = obj['task'];

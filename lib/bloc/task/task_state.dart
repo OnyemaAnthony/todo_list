@@ -18,7 +18,9 @@ class TaskLoadedState extends TaskState {
   @override
   List<Object> get props => [task];
 }
+class TaskDeletedState extends TaskState{
 
+}
 class CountLoadedState extends TaskState{
   final int count;
 

@@ -235,7 +235,7 @@ class _AddTaskScreenState extends State<AddTaskScreen> {
 
           );
 
-      Navigator.of(context).push(MaterialPageRoute(builder: (_)=>HomeScreen()));
+      Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (_)=>HomeScreen()));
     }
   }
 

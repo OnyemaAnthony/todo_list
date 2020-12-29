@@ -23,3 +23,10 @@ class SaveTaskEvent extends TaskEvent {
 class GetCountEvent extends TaskEvent{
 
 }
+
+class DeleteTaskEvent extends TaskEvent{
+  final int id;
+
+  DeleteTaskEvent(this.id);
+
+}

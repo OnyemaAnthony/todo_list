@@ -30,6 +30,8 @@ class TaskBloc extends Bloc<TaskEvent, TaskState> {
       yield* _mapSaveTaskEventToState(event);
     } else if (event is GetCountEvent) {
       yield* _mapGetCountEventToState(event);
+    }else if(event is DeleteTaskEvent){
+      yield* _mapDeleteTaskToState(event);
     }
   }
 
@@ -67,5 +69,20 @@ class TaskBloc extends Bloc<TaskEvent, TaskState> {
     } catch (e) {
       yield TaskErrorState(e.toString());
     }
+  }
+
+  Stream<TaskState>_mapDeleteTaskToState(DeleteTaskEvent event)async* {
+    yield TaskLoadingState();
+    try{
+
+      _repository.deleteTask(event.id).asStream().listen((event) {
+        add(GetCountEvent());
+      });
+      yield TaskDeletedState();
+
+    }catch(e){
+      yield TaskErrorState(e.toString());
+    }
+
   }
 }
