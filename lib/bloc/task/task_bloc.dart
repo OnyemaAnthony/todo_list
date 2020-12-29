@@ -12,26 +12,28 @@ part 'task_state.dart';
 class TaskBloc extends Bloc<TaskEvent, TaskState> {
   DatabaseRepository _repository;
 
-
   TaskBloc({@required DatabaseRepository repository})
-      : assert (repository != null),
+      : assert(repository != null),
         _repository = repository,
         super(TaskInitial());
 
   @override
-  TaskState get initialState => TaskInitial();
+  String toString() => 'Task Bloc';
 
   @override
-  Stream<TaskState> mapEventToState(TaskEvent event,) async* {
+  Stream<TaskState> mapEventToState(
+    TaskEvent event,
+  ) async* {
     if (event is FetchAllTaskEvent) {
       yield* _mapFetchAllTAskEventToState(event);
     } else if (event is SaveTaskEvent) {
-      _mapSaveTaskEventToState(event);
+      yield* _mapSaveTaskEventToState(event);
     }
   }
 
   Stream<TaskState> _mapFetchAllTAskEventToState(
-      FetchAllTaskEvent event) async* {
+    FetchAllTaskEvent event,
+  ) async* {
     yield TaskLoadingState();
     TodoListModel task;
 

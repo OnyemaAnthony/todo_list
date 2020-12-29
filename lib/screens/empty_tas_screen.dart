@@ -6,13 +6,16 @@ class EmptyTaskScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title:Text('Your task') ,
+        title: Text('Your task'),
         centerTitle: true,
       ),
       floatingActionButton: FloatingActionButton(
-        onPressed: (){
-          Navigator.of(context).push(MaterialPageRoute(builder:(_)=>AddTaskScreen()));
-
+        onPressed: () {
+          Navigator.of(context).push(
+            MaterialPageRoute(
+              builder: (_) => AddTaskScreen(),
+            ),
+          );
         },
         child: Icon(Icons.add),
       ),
@@ -26,14 +29,20 @@ class EmptyTaskScreen extends StatelessWidget {
               height: 100,
               width: 100,
             ),
-          SizedBox(height: 8.0, width: 8.0),
-            Text("You don't have any task yet", style: Theme.of(context).textTheme.title),
-            Text("Click here to add a new task",
-                style: Theme.of(context).textTheme.caption),
+            SizedBox(height: 8.0, width: 8.0),
+            Text(
+              "You don't have any task yet",
+              style: Theme.of(context).textTheme.title,
+            ),
+            Text(
+              "Click here to add a new task",
+              style: Theme.of(context).textTheme.caption,
+            ),
             SizedBox(height: 16.0, width: 16.0),
           ],
         ),
       ),
-    );;
+    );
+    ;
   }
 }
