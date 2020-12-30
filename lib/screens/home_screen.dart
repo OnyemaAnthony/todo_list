@@ -130,12 +130,13 @@ class _HomeScreenState extends State<HomeScreen> {
           DatabaseRepository().deleteTask(todo.id);
           tasks.remove(todo);
         });
+
+
+        Navigator.pop(context);
         if (await DatabaseRepository().getCount() == 0) {
           Navigator.pushReplacement(
               context, MaterialPageRoute(builder: (_) => EmptyTaskScreen()));
         }
-
-        Navigator.pop(context);
       },
     );
 

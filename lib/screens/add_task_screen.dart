@@ -230,6 +230,7 @@ class _AddTaskScreenState extends State<AddTaskScreen> {
               TodoListModel(
                 deadLine: dateController.text,
                 task: taskController.text,
+                 time: timeController.text
               ),
             ),
 

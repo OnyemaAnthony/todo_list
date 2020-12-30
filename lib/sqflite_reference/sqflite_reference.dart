@@ -19,6 +19,7 @@ class SqfLiteReference {
   }
 
   SqfLiteReference.internal();
+
   Future<Database> initDb() async {
     Directory documentDirectory = await getApplicationDocumentsDirectory();
 
@@ -30,7 +31,7 @@ class SqfLiteReference {
 
   void _onCreate(Database db, int newVersion) async {
     await db.execute(
-      "CREATE TABLE ${Utility.todoTable}(${Utility.id} INTEGER PRIMARY KEY, ${Utility.task} TEXT,${Utility.deadline} TEXT)",
+      "CREATE TABLE ${Utility.todoTable}(${Utility.id} INTEGER PRIMARY KEY, ${Utility.task} TEXT,${Utility.deadline} TEXT,${Utility.deadLineTime})",
     );
   }
 }
