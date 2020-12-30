@@ -4,6 +4,7 @@ import 'package:todo_list/bloc/task/task_bloc.dart';
 import 'package:todo_list/models/todo_list_model.dart';
 import 'package:todo_list/repository/database_repository.dart';
 import 'package:todo_list/screens/add_task_screen.dart';
+import 'package:todo_list/screens/empty_tas_screen.dart';
 import 'package:todo_list/utility/utilities.dart';
 
 class HomeScreen extends StatefulWidget {
@@ -13,7 +14,8 @@ class HomeScreen extends StatefulWidget {
 
 class _HomeScreenState extends State<HomeScreen> {
   TaskBloc taskBloc;
-  bool isChecked = false;
+
+  List<bool> _isChecks = List();
 
   @override
   Widget build(BuildContext context) {
@@ -40,6 +42,9 @@ class _HomeScreenState extends State<HomeScreen> {
               body: BlocBuilder<TaskBloc, TaskState>(
                 builder: (context, state) {
                   if (state is TaskLoadedState) {
+                    for (int i = 0; i < state.task.length; i++) {
+                      _isChecks.add(false);
+                    }
                     return buildTaskList(state.task);
                   } else if (state is TaskLoadingState) {
                     return Utility.showCirclarLoader();
@@ -54,39 +59,47 @@ class _HomeScreenState extends State<HomeScreen> {
     );
   }
 
-  Widget buildTaskList(List<TodoListModel> task) {
+  Widget buildTaskList(List<TodoListModel> tasks) {
     return ListView.builder(
-        itemCount: task.length,
+        itemCount: tasks.length,
         itemBuilder: (context, index) {
-          TodoListModel todo = task[index];
-          print(todo.id);
+          TodoListModel todo = tasks[index];
+          print(index);
           return Container(
             padding: const EdgeInsets.all(12.0),
             child: Material(
               elevation: 4.0,
               child: InkWell(
+                onLongPress: () {
+                  deleteTask(context, todo, index, tasks);
+                },
                 onTap: () {
-                  Navigator.of(context).push(
+                  Navigator.of(context).pushReplacement(
                       MaterialPageRoute(builder: (_) => AddTaskScreen(todo)));
                 },
                 child: Container(
-                  //height: double.parse(todo.task.length.toString()),
-
                   child: Row(
                     children: <Widget>[
                       ClipRRect(
                         child: Container(width: 5, color: Colors.red),
                       ),
                       Checkbox(
-                          value: isChecked,
-                          onChanged: (val) {
-                            taskBloc = BlocProvider.of<TaskBloc>(context);
-
+                          value: _isChecks[index],
+                          onChanged: (val) async {
                             setState(() {
-                              isChecked = val;
-
-                              taskBloc.add(DeleteTaskEvent(todo.id));
+                              _isChecks[index] = val;
+                              print(_isChecks[index]);
+                              if (_isChecks[index]) {}
+                              DatabaseRepository().deleteTask(todo.id);
+                              tasks.remove(todo);
                             });
+
+                            if (await DatabaseRepository().getCount() == 0) {
+                              Navigator.pushReplacement(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (_) => EmptyTaskScreen()));
+                            }
                           }),
                       Expanded(
                         child: Text(
@@ -100,28 +113,45 @@ class _HomeScreenState extends State<HomeScreen> {
             ),
           );
         });
-    bool rememberMe = false;
-
-    void _onRememberMeChanged(bool newValue) => setState(() {
-          rememberMe = newValue;
-
-          if (rememberMe) {
-            // TODO: Here goes your functionality that remembers the user.
-          } else {
-            // TODO: Forget the user
-          }
-        });
-
-    @override
-    Widget build(BuildContext context) {
-      return Checkbox(value: rememberMe, onChanged: _onRememberMeChanged);
-    }
   }
 
-  void deleteCheckBox(bool newValue) {
-    setState(() {
-      isChecked = newValue;
-    });
-    if (isChecked) {}
+  void deleteTask(BuildContext context, TodoListModel todo, int index,
+      List<TodoListModel> tasks) {
+    Widget cancelButton = FlatButton(
+      child: Text('Cancel'),
+      onPressed: () {
+        Navigator.pop(context);
+      },
+    );
+    Widget continueButton = FlatButton(
+      child: Text('Delete'),
+      onPressed: () async {
+        setState(() {
+          DatabaseRepository().deleteTask(todo.id);
+          tasks.remove(todo);
+        });
+        if (await DatabaseRepository().getCount() == 0) {
+          Navigator.pushReplacement(
+              context, MaterialPageRoute(builder: (_) => EmptyTaskScreen()));
+        }
+
+        Navigator.pop(context);
+      },
+    );
+
+    AlertDialog alert = AlertDialog(
+      title: Text('Notice'),
+      content: Text('Are you sure you want to delete the selected item ?'),
+      actions: [
+        cancelButton,
+        continueButton,
+      ],
+    );
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return alert;
+      },
+    );
   }
 }

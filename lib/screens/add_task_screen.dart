@@ -224,7 +224,7 @@ class _AddTaskScreenState extends State<AddTaskScreen> {
   }
 
   saveTask(BuildContext ctx) async {
-    if (_formKey.currentState.validate()) {
+    if (!_formKey.currentState.validate()) {
       ctx.read<TaskBloc>().add(
             SaveTaskEvent(
               TodoListModel(
