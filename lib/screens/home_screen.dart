@@ -5,6 +5,7 @@ import 'package:todo_list/models/todo_list_model.dart';
 import 'package:todo_list/repository/database_repository.dart';
 import 'package:todo_list/screens/add_task_screen.dart';
 import 'package:todo_list/screens/empty_tas_screen.dart';
+import 'package:todo_list/services/services.dart';
 import 'package:todo_list/utility/utilities.dart';
 
 class HomeScreen extends StatefulWidget {
@@ -60,11 +61,24 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 
   Widget buildTaskList(List<TodoListModel> tasks) {
+    //hour and minute
     return ListView.builder(
         itemCount: tasks.length,
         itemBuilder: (context, index) {
           TodoListModel todo = tasks[index];
-          print(index);
+          LocalNotification().showNotification(
+              title: 'Task Notification',
+              body: todo.task,
+              time: DateTime(DateTime.parse(todo.deadLine).year,
+                  DateTime.parse(todo.deadLine).month,
+                  DateTime.parse(todo.deadLine).day,
+                  DateTime.parse(todo.time).hour,
+                  DateTime.parse(todo.time).minute,
+                  DateTime.parse(todo.deadLine).second,
+                  DateTime.parse(todo.deadLine).millisecond,
+                  DateTime.parse(todo.deadLine).microsecond));
+
+
           return Container(
             padding: const EdgeInsets.all(12.0),
             child: Material(

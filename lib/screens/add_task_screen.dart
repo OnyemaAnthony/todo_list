@@ -219,6 +219,7 @@ class _AddTaskScreenState extends State<AddTaskScreen> {
     if (picked != null)
       setState(() {
         time = picked;
+        time.format(context);
         timeController.text = picked.toString().substring(10, 15);
       });
   }
@@ -255,8 +256,8 @@ class _AddTaskScreenState extends State<AddTaskScreen> {
           deadlineDate.microsecond).toString();
       //String current
       await LocalNotification().showNotification(
-          title: 'hello hi',
-          body: 'how are u',
+          title: 'Task Notification',
+          body: taskController.text,
           time: DateTime( deadlineDate.year,
               deadlineDate.month,
               deadlineDate.day,
@@ -268,9 +269,9 @@ class _AddTaskScreenState extends State<AddTaskScreen> {
       ctx.read<TaskBloc>().add(
         SaveTaskEvent(
           TodoListModel(
-              deadLine: dateController.text,
+              deadLine: deadlineDate.toString(),
               task: taskController.text,
-              time: timeController.text
+              time: time.toString()
           ),
         ),
 
