@@ -66,14 +66,16 @@ class _HomeScreenState extends State<HomeScreen> {
         itemCount: tasks.length,
         itemBuilder: (context, index) {
           TodoListModel todo = tasks[index];
+          print(todo.time.split(':')[0]);
+          print(todo.time.split(':')[1]);
           LocalNotification().showNotification(
               title: 'Task Notification',
               body: todo.task,
               time: DateTime(DateTime.parse(todo.deadLine).year,
                   DateTime.parse(todo.deadLine).month,
                   DateTime.parse(todo.deadLine).day,
-                  DateTime.parse(todo.time).hour,
-                  DateTime.parse(todo.time).minute,
+                  int.parse(todo.time.split(':')[0]),
+                  int.parse(todo.time.split(':')[1]),
                   DateTime.parse(todo.deadLine).second,
                   DateTime.parse(todo.deadLine).millisecond,
                   DateTime.parse(todo.deadLine).microsecond));
