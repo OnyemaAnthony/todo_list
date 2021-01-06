@@ -28,7 +28,6 @@ class _HomeScreenState extends State<HomeScreen> {
           return Scaffold(
               appBar: AppBar(
                 title: Text('Todo List'),
-                centerTitle: true,
               ),
               floatingActionButton: FloatingActionButton(
                 onPressed: () {
@@ -61,25 +60,22 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 
   Widget buildTaskList(List<TodoListModel> tasks) {
-    //hour and minute
     return ListView.builder(
         itemCount: tasks.length,
         itemBuilder: (context, index) {
           TodoListModel todo = tasks[index];
-          print(todo.time.split(':')[0]);
-          print(todo.time.split(':')[1]);
           LocalNotification().showNotification(
-              title: 'Task Notification',
+              title: 'Todo Notification',
               body: todo.task,
-              time: DateTime(DateTime.parse(todo.deadLine).year,
+              time: DateTime(
+                  DateTime.parse(todo.deadLine).year,
                   DateTime.parse(todo.deadLine).month,
                   DateTime.parse(todo.deadLine).day,
                   int.parse(todo.time.split(':')[0]),
-                  int.parse(todo.time.split(':')[1]),
+                  int.parse(todo.time.split(':')[1].split(' ')[0]),
                   DateTime.parse(todo.deadLine).second,
                   DateTime.parse(todo.deadLine).millisecond,
                   DateTime.parse(todo.deadLine).microsecond));
-
 
           return Container(
             padding: const EdgeInsets.all(12.0),
@@ -94,32 +90,77 @@ class _HomeScreenState extends State<HomeScreen> {
                       MaterialPageRoute(builder: (_) => AddTaskScreen(todo)));
                 },
                 child: Container(
-                  child: Row(
-                    children: <Widget>[
-                      ClipRRect(
-                        child: Container(width: 5, color: Colors.red),
-                      ),
-                      Checkbox(
-                          value: _isChecks[index],
-                          onChanged: (val) async {
-                            setState(() {
-                              _isChecks[index] = val;
-                              print(_isChecks[index]);
-                              if (_isChecks[index]) {}
-                              DatabaseRepository().deleteTask(todo.id);
-                              tasks.remove(todo);
-                            });
+                  child: Column(
+                    children: [
+                      Row(
+                        children: <Widget>[
+                          ClipRRect(
+                            child: Container(width: 5, color: Colors.red),
+                          ),
+                          Checkbox(
+                              value: _isChecks[index],
+                              onChanged: (val) async {
+                                setState(() {
+                                  _isChecks[index] = val;
+                                  print(_isChecks[index]);
+                                  if (_isChecks[index]) {}
+                                  DatabaseRepository().deleteTask(todo.id);
+                                  tasks.remove(todo);
+                                });
 
-                            if (await DatabaseRepository().getCount() == 0) {
-                              Navigator.pushReplacement(
-                                  context,
-                                  MaterialPageRoute(
-                                      builder: (_) => EmptyTaskScreen()));
-                            }
-                          }),
-                      Expanded(
-                        child: Text(
-                          todo.task,
+                                if (await DatabaseRepository().getCount() ==
+                                    0) {
+                                  Navigator.pushReplacement(
+                                      context,
+                                      MaterialPageRoute(
+                                          builder: (_) => EmptyTaskScreen()));
+                                }
+                              }),
+                          Expanded(
+                            child: Text(
+                              todo.task +
+                                  'Lorem ipsum, or lipsum as it is sometimes known, is dummy text used in laying out print, graphic or web designs. The passage is attributed to an unknown typesetter in the 15th century who is thought to have scrambled parts of Ciceros De Finibus Bonorum et Malorum for use in a type specimen book.',
+                            ),
+                          ),
+                        ],
+                      ),
+                      Padding(
+                        padding: EdgeInsets.only(left: 13),
+                        child: Row(
+                          children: [
+                            DateTime.now().isBefore(DateTime(
+                                    DateTime.parse(todo.deadLine).year,
+                                    DateTime.parse(todo.deadLine).month,
+                                    DateTime.parse(todo.deadLine).day,
+                                    int.parse(todo.time.split(':')[0]),
+                                    int.parse(
+                                        todo.time.split(':')[1].split(' ')[0]),
+                                    DateTime.parse(todo.deadLine).second,
+                                    DateTime.parse(todo.deadLine).millisecond,
+                                    DateTime.parse(todo.deadLine).microsecond))
+                                ? Icon(Icons.access_time)
+                                : Icon(Icons.timer_off),
+                            SizedBox(
+                              width: 15,
+                            ),
+                            DateTime.now().i(DateTime(
+                                    DateTime.parse(todo.deadLine).year,
+                                    DateTime.parse(todo.deadLine).month,
+                                    DateTime.parse(todo.deadLine).day,
+                                    int.parse(todo.time.split(':')[0]),
+                                    int.parse(
+                                        todo.time.split(':')[1].split(' ')[0]),
+                                    DateTime.parse(todo.deadLine).second,
+                                    DateTime.parse(todo.deadLine).millisecond,
+                                    DateTime.parse(todo.deadLine).microsecond))
+                                ? Text(
+                                    '${todo.deadLine.split(':')[0].split(' ')[0]}, ${todo.time}')
+                                : Text(
+                                    '${todo.deadLine.split(':')[0].split(' ')[0]}, ${todo.time}',style: TextStyle(
+                              color: Colors.red,
+                              decoration: TextDecoration.lineThrough
+                            ),),
+                          ],
                         ),
                       ),
                     ],
@@ -146,7 +187,6 @@ class _HomeScreenState extends State<HomeScreen> {
           DatabaseRepository().deleteTask(todo.id);
           tasks.remove(todo);
         });
-
 
         Navigator.pop(context);
         if (await DatabaseRepository().getCount() == 0) {

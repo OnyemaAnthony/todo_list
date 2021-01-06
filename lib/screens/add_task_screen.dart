@@ -250,7 +250,7 @@ class _AddTaskScreenState extends State<AddTaskScreen> {
           TodoListModel(
               deadLine: deadlineDate.toString(),
               task: taskController.text,
-              time: time.toString().substring(10, 15)
+              time: timeController.text
           ),
         ),
 
