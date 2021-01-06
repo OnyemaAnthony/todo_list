@@ -1,8 +1,7 @@
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 
 class LocalNotification {
-  FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin = FlutterLocalNotificationsPlugin();
-
+git
   Future<void> showNotification({DateTime time,String title,String body})async{
 
     var initializationSettingsAndroid = AndroidInitializationSettings('ic_launcher');
