@@ -76,6 +76,7 @@ class _HomeScreenState extends State<HomeScreen> {
                   DateTime.parse(todo.deadLine).second,
                   DateTime.parse(todo.deadLine).millisecond,
                   DateTime.parse(todo.deadLine).microsecond));
+          print(int.parse(todo.time.split(':')[0])*2);
 
           return Container(
             padding: const EdgeInsets.all(12.0),
@@ -118,8 +119,7 @@ class _HomeScreenState extends State<HomeScreen> {
                               }),
                           Expanded(
                             child: Text(
-                              todo.task +
-                                  'Lorem ipsum, or lipsum as it is sometimes known, is dummy text used in laying out print, graphic or web designs. The passage is attributed to an unknown typesetter in the 15th century who is thought to have scrambled parts of Ciceros De Finibus Bonorum et Malorum for use in a type specimen book.',
+                              todo.task,
                             ),
                           ),
                         ],
@@ -143,11 +143,13 @@ class _HomeScreenState extends State<HomeScreen> {
                             SizedBox(
                               width: 15,
                             ),
-                            DateTime.now().i(DateTime(
+                            DateTime.now().isBefore(DateTime(
                                     DateTime.parse(todo.deadLine).year,
                                     DateTime.parse(todo.deadLine).month,
                                     DateTime.parse(todo.deadLine).day,
-                                    int.parse(todo.time.split(':')[0]),
+                                    todo.time.contains('PM')
+                                        ? int.parse(todo.time.split(':')[0]) * 2
+                                        : int.parse(todo.time.split(':')[0]),
                                     int.parse(
                                         todo.time.split(':')[1].split(' ')[0]),
                                     DateTime.parse(todo.deadLine).second,
@@ -156,10 +158,11 @@ class _HomeScreenState extends State<HomeScreen> {
                                 ? Text(
                                     '${todo.deadLine.split(':')[0].split(' ')[0]}, ${todo.time}')
                                 : Text(
-                                    '${todo.deadLine.split(':')[0].split(' ')[0]}, ${todo.time}',style: TextStyle(
-                              color: Colors.red,
-                              decoration: TextDecoration.lineThrough
-                            ),),
+                                    '${todo.deadLine.split(':')[0].split(' ')[0]}, ${todo.time}',
+                                    style: TextStyle(
+                                        color: Colors.red,
+                                        decoration: TextDecoration.lineThrough),
+                                  ),
                           ],
                         ),
                       ),

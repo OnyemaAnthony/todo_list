@@ -35,6 +35,7 @@ class _AddTaskScreenState extends State<AddTaskScreen> {
     if (widget.todo != null) {
       dateController.text = widget.todo.deadLine;
       taskController.text = widget.todo.task;
+      timeController.text = widget.todo.time;
     }
 
     super.initState();
@@ -43,10 +44,9 @@ class _AddTaskScreenState extends State<AddTaskScreen> {
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
-      create: (_) =>
-          TaskBloc(
-            repository: DatabaseRepository(),
-          ),
+      create: (_) => TaskBloc(
+        repository: DatabaseRepository(),
+      ),
       child: Builder(
         builder: (BuildContext ctx) {
           return Scaffold(
@@ -92,7 +92,7 @@ class _AddTaskScreenState extends State<AddTaskScreen> {
                     child: TextFormField(
                       controller: taskController,
                       validator: (input) =>
-                      input.isEmpty ? 'Please Enter a valid task' : null,
+                          input.isEmpty ? 'Please Enter a valid task' : null,
                       textInputAction: TextInputAction.newline,
                       keyboardType: TextInputType.multiline,
                       maxLines: null,
@@ -108,9 +108,7 @@ class _AddTaskScreenState extends State<AddTaskScreen> {
                 ),
                 Icon(
                   Icons.keyboard_voice,
-                  color: Theme
-                      .of(context)
-                      .primaryColor,
+                  color: Theme.of(context).primaryColor,
                   size: 28,
                 ),
               ],
@@ -120,11 +118,11 @@ class _AddTaskScreenState extends State<AddTaskScreen> {
             ),
             dateController.text.isNotEmpty
                 ? Center(
-              child: Text(
-                "Dead line",
-                style: TextStyle(fontSize: 19),
-              ),
-            )
+                    child: Text(
+                      "Dead line",
+                      style: TextStyle(fontSize: 19),
+                    ),
+                  )
                 : Text('Dead line'),
             SizedBox(
               height: 10,
@@ -136,7 +134,7 @@ class _AddTaskScreenState extends State<AddTaskScreen> {
                     width: 400,
                     child: TextFormField(
                       validator: (input) =>
-                      input.isEmpty ? 'Please Enter a valid date' : null,
+                          input.isEmpty ? 'Please Enter a valid date' : null,
                       onTap: () {
                         _showDatePicker(context);
                       },
@@ -152,16 +150,11 @@ class _AddTaskScreenState extends State<AddTaskScreen> {
                   ),
                 ),
                 SizedBox(
-                  width: MediaQuery
-                      .of(context)
-                      .size
-                      .width * 0.01,
+                  width: MediaQuery.of(context).size.width * 0.01,
                 ),
                 Icon(
                   Icons.date_range,
-                  color: Theme
-                      .of(context)
-                      .primaryColor,
+                  color: Theme.of(context).primaryColor,
                   size: 28,
                 ),
                 dateController.text.isEmpty
@@ -182,8 +175,7 @@ class _AddTaskScreenState extends State<AddTaskScreen> {
           child: Container(
             width: 400,
             child: TextFormField(
-              validator: (input) =>
-              input.isEmpty ? "Enter a valid time" : null,
+              validator: (input) => input.isEmpty ? "Enter a valid time" : null,
               onTap: () {
                 _selectTime(context);
               },
@@ -202,9 +194,7 @@ class _AddTaskScreenState extends State<AddTaskScreen> {
         ),
         Icon(
           Icons.timer,
-          color: Theme
-              .of(context)
-              .primaryColor,
+          color: Theme.of(context).primaryColor,
           size: 28,
         ),
       ],
@@ -219,17 +209,16 @@ class _AddTaskScreenState extends State<AddTaskScreen> {
     if (picked != null)
       setState(() {
         time = picked;
-        //time.format(context);
         timeController.text = picked.format(context);
       });
   }
 
   void _showDatePicker(BuildContext context) {
     showDatePicker(
-        context: context,
-        initialDate: DateTime.now(),
-        firstDate: DateTime(2020),
-        lastDate: DateTime(3000))
+            context: context,
+            initialDate: DateTime.now(),
+            firstDate: DateTime(2020),
+            lastDate: DateTime(3000))
         .then((pickedDate) {
       if (pickedDate == null) {
         return;
@@ -245,19 +234,31 @@ class _AddTaskScreenState extends State<AddTaskScreen> {
 
   saveTask(BuildContext ctx) async {
     if (_formKey.currentState.validate()) {
-      ctx.read<TaskBloc>().add(
-        SaveTaskEvent(
-          TodoListModel(
-              deadLine: deadlineDate.toString(),
-              task: taskController.text,
-              time: timeController.text
+
+      if(widget.todo != null){
+       ctx.read<TaskBloc>().add(UpdateTaskEvent(TodoListModel(
+         deadLine: deadlineDate.toString(),
+         task: taskController.text,
+         time: timeController.text,
+       )));
+
+        Navigator.of(context)
+            .pushReplacement(MaterialPageRoute(builder: (_) => HomeScreen()));
+
+      }else {
+        ctx.read<TaskBloc>().add(
+          SaveTaskEvent(
+            TodoListModel(
+                deadLine: deadlineDate.toString(),
+                task: taskController.text,
+                time: timeController.text),
           ),
-        ),
+        );
+        Navigator.of(context)
+            .pushReplacement(MaterialPageRoute(builder: (_) => HomeScreen()));
+      }
 
-      );
 
-      Navigator.of(context).pushReplacement(
-          MaterialPageRoute(builder: (_) => HomeScreen()));
     }
   }
 

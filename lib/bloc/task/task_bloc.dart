@@ -32,6 +32,8 @@ class TaskBloc extends Bloc<TaskEvent, TaskState> {
       yield* _mapGetCountEventToState(event);
     }else if(event is DeleteTaskEvent){
       yield* _mapDeleteTaskToState(event);
+    }else if(event is UpdateTaskEvent){
+      yield*_mapUpdateTaskEventToState(event);
     }
   }
 
@@ -84,5 +86,16 @@ class TaskBloc extends Bloc<TaskEvent, TaskState> {
       yield TaskErrorState(e.toString());
     }
 
+  }
+
+  Stream<TaskState>_mapUpdateTaskEventToState(UpdateTaskEvent event)async* {
+    yield TaskLoadingState();
+
+    try{
+      await _repository.updateTask(event.todo);
+
+    }catch(e){
+      yield TaskErrorState(e.toString());
+    }
   }
 }
