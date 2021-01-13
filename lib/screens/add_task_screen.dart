@@ -52,7 +52,9 @@ class _AddTaskScreenState extends State<AddTaskScreen> {
           return Scaffold(
             appBar: AppBar(
               centerTitle: true,
-              title: Text('Add a new Task'),
+              title: Text('Add a new Task',style: TextStyle(
+                color: Colors.white
+              ),),
               actions: [
                 GestureDetector(
                   onTap: () {
@@ -63,6 +65,7 @@ class _AddTaskScreenState extends State<AddTaskScreen> {
                     child: Icon(
                       Icons.check,
                       size: 30,
+                      color: Colors.white,
                     ),
                   ),
                 )

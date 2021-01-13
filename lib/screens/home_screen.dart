@@ -27,9 +27,12 @@ class _HomeScreenState extends State<HomeScreen> {
         builder: (BuildContext ctx) {
           return Scaffold(
               appBar: AppBar(
-                title: Text('Todo List'),
+                title: Text('Todo List',style: TextStyle(
+                  color: Colors.white
+                ),),
               ),
               floatingActionButton: FloatingActionButton(
+
                 onPressed: () {
                   Navigator.of(context).pushReplacement(
                     MaterialPageRoute(
@@ -37,7 +40,7 @@ class _HomeScreenState extends State<HomeScreen> {
                     ),
                   );
                 },
-                child: Icon(Icons.add),
+                child: Icon(Icons.add,color: Colors.white,),
               ),
               body: BlocBuilder<TaskBloc, TaskState>(
                 builder: (context, state) {

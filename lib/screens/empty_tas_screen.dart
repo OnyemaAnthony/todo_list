@@ -6,7 +6,9 @@ class EmptyTaskScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Your task'),
+        title: Text('Your task',style: TextStyle(
+          color: Colors.white
+        ),),
         centerTitle: true,
       ),
       floatingActionButton: FloatingActionButton(
@@ -17,7 +19,7 @@ class EmptyTaskScreen extends StatelessWidget {
             ),
           );
         },
-        child: Icon(Icons.add),
+        child: Icon(Icons.add,color: Colors.white,),
       ),
       body: Center(
         child: Column(

@@ -34,7 +34,12 @@ class _MyAppState extends State<MyApp> {
       debugShowCheckedModeBanner: false,
       title: 'Todo List',
       theme: ThemeData(
-        primarySwatch: Colors.blue,
+        primarySwatch: Colors.orange,
+        textTheme:TextTheme(
+          caption: TextStyle(
+            color: Colors.white
+          )
+        ) ,
       ),
      home: BlocBuilder<TaskBloc,TaskState>(
        builder: (context,state){
