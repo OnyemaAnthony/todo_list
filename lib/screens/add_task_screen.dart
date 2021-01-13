@@ -4,6 +4,7 @@ import 'package:intl/intl.dart';
 import 'package:todo_list/bloc/task/task_bloc.dart';
 import 'package:todo_list/models/todo_list_model.dart';
 import 'package:todo_list/repository/database_repository.dart';
+import 'package:todo_list/screens/empty_tas_screen.dart';
 import 'package:todo_list/screens/home_screen.dart';
 import 'package:todo_list/services/services.dart';
 import 'package:todo_list/utility/utilities.dart';
@@ -33,7 +34,7 @@ class _AddTaskScreenState extends State<AddTaskScreen> {
   @override
   void initState() {
     if (widget.todo != null) {
-      dateController.text = widget.todo.deadLine;
+      dateController.text = widget.todo.formattedDate;
       taskController.text = widget.todo.task;
       timeController.text = widget.todo.time;
     }
@@ -43,37 +44,45 @@ class _AddTaskScreenState extends State<AddTaskScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return BlocProvider(
-      create: (_) => TaskBloc(
-        repository: DatabaseRepository(),
-      ),
-      child: Builder(
-        builder: (BuildContext ctx) {
-          return Scaffold(
-            appBar: AppBar(
-              centerTitle: true,
-              title: Text('Add a new Task',style: TextStyle(
-                color: Colors.white
-              ),),
-              actions: [
-                GestureDetector(
-                  onTap: () {
-                    saveTask(ctx);
-                  },
-                  child: Container(
-                    margin: EdgeInsets.only(right: 20),
-                    child: Icon(
-                      Icons.check,
-                      size: 30,
-                      color: Colors.white,
-                    ),
-                  ),
-                )
-              ],
+    return WillPopScope(
+      onWillPop: () async{
+        return await DatabaseRepository().getCount() !=  0? Navigator.of(context).pushReplacement(
+            MaterialPageRoute(builder: (_) => HomeScreen())): Navigator.of(context).pushReplacement(
+    MaterialPageRoute(builder: (_) => EmptyTaskScreen()));
+      },
+      child: BlocProvider(
+        create: (_) =>
+            TaskBloc(
+              repository: DatabaseRepository(),
             ),
-            body: buildTask(ctx),
-          );
-        },
+        child: Builder(
+          builder: (BuildContext ctx) {
+            return Scaffold(
+              appBar: AppBar(
+                centerTitle: true,
+                title: Text('Add a new Task', style: TextStyle(
+                    color: Colors.white
+                ),),
+                actions: [
+                  GestureDetector(
+                    onTap: () {
+                      saveTask(ctx);
+                    },
+                    child: Container(
+                      margin: EdgeInsets.only(right: 20),
+                      child: Icon(
+                        Icons.check,
+                        size: 30,
+                        color: Colors.white,
+                      ),
+                    ),
+                  )
+                ],
+              ),
+              body: buildTask(ctx),
+            );
+          },
+        ),
       ),
     );
   }
@@ -95,7 +104,7 @@ class _AddTaskScreenState extends State<AddTaskScreen> {
                     child: TextFormField(
                       controller: taskController,
                       validator: (input) =>
-                          input.isEmpty ? 'Please Enter a valid task' : null,
+                      input.isEmpty ? 'Please Enter a valid task' : null,
                       textInputAction: TextInputAction.newline,
                       keyboardType: TextInputType.multiline,
                       maxLines: null,
@@ -111,7 +120,9 @@ class _AddTaskScreenState extends State<AddTaskScreen> {
                 ),
                 Icon(
                   Icons.keyboard_voice,
-                  color: Theme.of(context).primaryColor,
+                  color: Theme
+                      .of(context)
+                      .primaryColor,
                   size: 28,
                 ),
               ],
@@ -121,11 +132,11 @@ class _AddTaskScreenState extends State<AddTaskScreen> {
             ),
             dateController.text.isNotEmpty
                 ? Center(
-                    child: Text(
-                      "Dead line",
-                      style: TextStyle(fontSize: 19),
-                    ),
-                  )
+              child: Text(
+                "Dead line",
+                style: TextStyle(fontSize: 19),
+              ),
+            )
                 : Text('Dead line'),
             SizedBox(
               height: 10,
@@ -137,7 +148,7 @@ class _AddTaskScreenState extends State<AddTaskScreen> {
                     width: 400,
                     child: TextFormField(
                       validator: (input) =>
-                          input.isEmpty ? 'Please Enter a valid date' : null,
+                      input.isEmpty ? 'Please Enter a valid date' : null,
                       onTap: () {
                         _showDatePicker(context);
                       },
@@ -153,11 +164,16 @@ class _AddTaskScreenState extends State<AddTaskScreen> {
                   ),
                 ),
                 SizedBox(
-                  width: MediaQuery.of(context).size.width * 0.01,
+                  width: MediaQuery
+                      .of(context)
+                      .size
+                      .width * 0.01,
                 ),
                 Icon(
                   Icons.date_range,
-                  color: Theme.of(context).primaryColor,
+                  color: Theme
+                      .of(context)
+                      .primaryColor,
                   size: 28,
                 ),
                 dateController.text.isEmpty
@@ -197,7 +213,9 @@ class _AddTaskScreenState extends State<AddTaskScreen> {
         ),
         Icon(
           Icons.timer,
-          color: Theme.of(context).primaryColor,
+          color: Theme
+              .of(context)
+              .primaryColor,
           size: 28,
         ),
       ],
@@ -218,10 +236,10 @@ class _AddTaskScreenState extends State<AddTaskScreen> {
 
   void _showDatePicker(BuildContext context) {
     showDatePicker(
-            context: context,
-            initialDate: DateTime.now(),
-            firstDate: DateTime(2020),
-            lastDate: DateTime(3000))
+        context: context,
+        initialDate: DateTime.now(),
+        firstDate: DateTime(2020),
+        lastDate: DateTime(3000))
         .then((pickedDate) {
       if (pickedDate == null) {
         return;
@@ -237,31 +255,30 @@ class _AddTaskScreenState extends State<AddTaskScreen> {
 
   saveTask(BuildContext ctx) async {
     if (_formKey.currentState.validate()) {
-
-      if(widget.todo != null){
-       ctx.read<TaskBloc>().add(UpdateTaskEvent(TodoListModel(
-         deadLine: deadlineDate.toString(),
-         task: taskController.text,
-         time: timeController.text,
-       )));
+      if (widget.todo != null) {
+        ctx.read<TaskBloc>().add(UpdateTaskEvent(TodoListModel(
+          deadLine: deadlineDate.toString(),
+          task: taskController.text,
+          time: timeController.text,
+          id: widget.todo.id
+        )));
 
         Navigator.of(context)
             .pushReplacement(MaterialPageRoute(builder: (_) => HomeScreen()));
-
-      }else {
+      } else {
         ctx.read<TaskBloc>().add(
           SaveTaskEvent(
             TodoListModel(
                 deadLine: deadlineDate.toString(),
                 task: taskController.text,
-                time: timeController.text),
+                time: timeController.text,
+                formattedDate: dateController.text
+            ),
           ),
         );
         Navigator.of(context)
             .pushReplacement(MaterialPageRoute(builder: (_) => HomeScreen()));
       }
-
-
     }
   }
 

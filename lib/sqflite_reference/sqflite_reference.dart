@@ -31,7 +31,7 @@ class SqfLiteReference {
 
   void _onCreate(Database db, int newVersion) async {
     await db.execute(
-      "CREATE TABLE ${Utility.todoTable}(${Utility.id} INTEGER PRIMARY KEY, ${Utility.task} TEXT,${Utility.deadline} TEXT,${Utility.deadLineTime})",
+      "CREATE TABLE ${Utility.todoTable}(${Utility.id} INTEGER PRIMARY KEY, ${Utility.task} TEXT,${Utility.deadline} TEXT,${Utility.deadLineTime} TEXT, ${Utility.formattedDate} TEXT )",
     );
   }
 }

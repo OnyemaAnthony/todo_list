@@ -141,8 +141,8 @@ class _HomeScreenState extends State<HomeScreen> {
                                     DateTime.parse(todo.deadLine).second,
                                     DateTime.parse(todo.deadLine).millisecond,
                                     DateTime.parse(todo.deadLine).microsecond))
-                                ? Icon(Icons.access_time)
-                                : Icon(Icons.timer_off),
+                                ? Icon(Icons.timer)
+                                : Icon(Icons.timer),
                             SizedBox(
                               width: 15,
                             ),
@@ -189,8 +189,9 @@ class _HomeScreenState extends State<HomeScreen> {
     Widget continueButton = FlatButton(
       child: Text('Delete'),
       onPressed: () async {
+        DatabaseRepository().deleteTask(todo.id);
         setState(() {
-          DatabaseRepository().deleteTask(todo.id);
+
           tasks.remove(todo);
         });
 

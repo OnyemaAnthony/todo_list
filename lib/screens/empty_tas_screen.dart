@@ -4,6 +4,7 @@ import 'package:todo_list/screens/add_task_screen.dart';
 class EmptyTaskScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
+    Size deviceSize = MediaQuery.of(context).size;
     return Scaffold(
       appBar: AppBar(
         title: Text('Your task',style: TextStyle(
@@ -28,8 +29,8 @@ class EmptyTaskScreen extends StatelessWidget {
           children: <Widget>[
             Image.asset(
               "assets/images/empty_task.png",
-              height: 100,
-              width: 100,
+              height:deviceSize.height *0.29,
+              width: deviceSize.width * 0.29 ,
             ),
             SizedBox(height: 8.0, width: 8.0),
             Text(

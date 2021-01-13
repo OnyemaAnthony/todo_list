@@ -7,6 +7,7 @@ class Utility {
   static String task = 'task';
   static String deadline = 'deadLine';
   static String deadLineTime = 'time';
+  static String formattedDate = 'formattedDate';
 
   static void showLongErrorToast(String msg) {
     Fluttertoast.showToast(
