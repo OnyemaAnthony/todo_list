@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/scheduler.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:todo_list/bloc/task/task_bloc.dart';
 import 'package:todo_list/models/todo_list_model.dart';
@@ -67,19 +68,27 @@ class _HomeScreenState extends State<HomeScreen> {
         itemCount: tasks.length,
         itemBuilder: (context, index) {
           TodoListModel todo = tasks[index];
-          LocalNotification().showNotification(
-              title: 'Todo Notification',
-              body: todo.task,
-              time: DateTime(
-                  DateTime.parse(todo.deadLine).year,
-                  DateTime.parse(todo.deadLine).month,
-                  DateTime.parse(todo.deadLine).day,
-                  int.parse(todo.time.split(':')[0]),
-                  int.parse(todo.time.split(':')[1].split(' ')[0]),
-                  DateTime.parse(todo.deadLine).second,
-                  DateTime.parse(todo.deadLine).millisecond,
-                  DateTime.parse(todo.deadLine).microsecond));
-          print(int.parse(todo.time.split(':')[0])*2);
+//          print(todo.time.split(':')[0]);
+//          print(todo.deadLine);
+          final deadLine = DateTime(
+              DateTime.parse(todo.deadLine).year,
+              DateTime.parse(todo.deadLine).month,
+              DateTime.parse(todo.deadLine).day,
+              int.parse(todo.time.split(':')[0]),
+              int.parse(todo.time.split(':')[1].split(' ')[0]),
+              DateTime.parse(todo.deadLine).second);
+          print(deadLine);
+          print(DateTime.now().isAtSameMomentAs(deadLine));
+          if(DateTime.now().isAtSameMomentAs(deadLine)){
+
+            Utility.showLongErrorToast('its time');
+
+            LocalNotification().showNotification(
+                title: 'Todo Notification',
+                body: todo.task,
+                time:deadLine );
+
+          }
 
           return Container(
             padding: const EdgeInsets.all(12.0),
