@@ -79,7 +79,7 @@ class _HomeScreenState extends State<HomeScreen> {
               DateTime.parse(todo.deadLine).second);
           print(deadLine);
           print(DateTime.now().isAtSameMomentAs(deadLine));
-          if(DateTime.now().isAtSameMomentAs(deadLine)){
+        //  if(DateTime.now().isAtSameMomentAs(deadLine)){
 
             Utility.showLongErrorToast('its time');
 
@@ -88,7 +88,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 body: todo.task,
                 time:deadLine );
 
-          }
+        //  }
 
           return Container(
             padding: const EdgeInsets.all(12.0),
