@@ -2,6 +2,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'bloc/simple_bloc_observer.dart';
+import 'bloc/task/task_bloc.dart';
 import 'package:todo_list/bloc/simple_bloc_observer.dart';
 import 'package:todo_list/bloc/task/task_bloc.dart';
 import 'package:todo_list/repository/database_repository.dart';
