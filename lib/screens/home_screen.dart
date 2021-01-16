@@ -73,25 +73,35 @@ class _HomeScreenState extends State<HomeScreen> {
           TodoListModel todo = tasks[index];
 //          print(todo.time.split(':')[0]);
 //          print(todo.deadLine);
-          final deadLine = DateTime(
-              DateTime.parse(todo.deadLine).year,
-              DateTime.parse(todo.deadLine).month,
-              DateTime.parse(todo.deadLine).day,
-              int.parse(todo.time.split(':')[0]),
-              int.parse(todo.time.split(':')[1].split(' ')[0]),
-              DateTime.parse(todo.deadLine).second);
-          print(deadLine);
-          print(DateTime.now().isAtSameMomentAs(deadLine));
-        //  if(DateTime.now().isAtSameMomentAs(deadLine)){
+//          final deadLine = DateTime(
+//              DateTime.parse(todo.deadLine).year,
+//              DateTime.parse(todo.deadLine).month,
+//              DateTime.parse(todo.deadLine).day,
+//              DateTime.parse(todo.deadLine).hour,
+//              DateTime.parse(todo.deadLine).minute,
+//
+//
+//              int.parse(todo.time.split(':')[0]),
+//              int.parse(todo.time.split(':')[1].split(' ')[0]),
+//              DateTime.parse(todo.deadLine).second);
+          final deadLine = DateTime.parse(todo.deadLine);
+          print('the date is $deadLine');
+          print('equal ${DateTime.now().compareTo(deadLine)== 0}');
+          print('smaller ${DateTime.now().compareTo(deadLine)< 0}');
+          print('bigger ${DateTime.now().compareTo(deadLine)> 0}');
 
-            Utility.showLongErrorToast('its time');
+         // print('hello'+DateTime.now().difference(deadLine).toString());
+          // 
+          if(DateTime.now().isAtSameMomentAs(deadLine)){
+
+           Utility.showLongErrorToast('its time');
 
             LocalNotification().showNotification(
                 title: 'Todo Notification',
                 body: todo.task,
                 time:deadLine );
 
-        //  }
+          }
 
           return Container(
             padding: const EdgeInsets.all(12.0),
@@ -143,33 +153,14 @@ class _HomeScreenState extends State<HomeScreen> {
                         padding: EdgeInsets.only(left: 13),
                         child: Row(
                           children: [
-                            DateTime.now().isBefore(DateTime(
-                                    DateTime.parse(todo.deadLine).year,
-                                    DateTime.parse(todo.deadLine).month,
-                                    DateTime.parse(todo.deadLine).day,
-                                    int.parse(todo.time.split(':')[0]),
-                                    int.parse(
-                                        todo.time.split(':')[1].split(' ')[0]),
-                                    DateTime.parse(todo.deadLine).second,
-                                    DateTime.parse(todo.deadLine).millisecond,
-                                    DateTime.parse(todo.deadLine).microsecond))
+                            
+                            DateTime.now().isAfter(deadLine)
                                 ? Icon(Icons.timer)
                                 : Icon(Icons.timer),
                             SizedBox(
                               width: 15,
                             ),
-                            DateTime.now().isBefore(DateTime(
-                                    DateTime.parse(todo.deadLine).year,
-                                    DateTime.parse(todo.deadLine).month,
-                                    DateTime.parse(todo.deadLine).day,
-                                    todo.time.contains('PM')
-                                        ? int.parse(todo.time.split(':')[0]) * 2
-                                        : int.parse(todo.time.split(':')[0]),
-                                    int.parse(
-                                        todo.time.split(':')[1].split(' ')[0]),
-                                    DateTime.parse(todo.deadLine).second,
-                                    DateTime.parse(todo.deadLine).millisecond,
-                                    DateTime.parse(todo.deadLine).microsecond))
+                            DateTime.now().isAfter(deadLine)
                                 ? Text(
                                     '${todo.deadLine.split(':')[0].split(' ')[0]}, ${todo.time}')
                                 : Text(

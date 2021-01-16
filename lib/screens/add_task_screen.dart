@@ -271,7 +271,7 @@ class _AddTaskScreenState extends State<AddTaskScreen> {
         ctx.read<TaskBloc>().add(
           SaveTaskEvent(
             TodoListModel(
-                deadLine: deadlineDate.toString(),
+                deadLine: deadlineDate.toIso8601String(),
                 task: taskController.text,
                 time: timeController.text,
                 formattedDate: dateController.text
