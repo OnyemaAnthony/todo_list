@@ -2,6 +2,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
+import 'package:todo_list/services/services.dart';
 import 'empty_tas_screen.dart';
 import 'home_screen.dart';
 import 'package:todo_list/bloc/task/task_bloc.dart';
@@ -27,6 +28,7 @@ class _AddTaskScreenState extends State<AddTaskScreen> {
   TextEditingController dateController = TextEditingController();
   TextEditingController timeController = TextEditingController();
   final DateFormat formatter = DateFormat('dd, MMMM, yyyy');
+  final TodoListModel todo = TodoListModel(formattedDate: '',time: '',task: '',deadLine: '');
 
   DateTime deadlineDate = DateTime.now();
   TimeOfDay time = TimeOfDay.now();
@@ -233,6 +235,7 @@ class _AddTaskScreenState extends State<AddTaskScreen> {
       setState(() {
         time = picked;
         timeController.text = picked.format(context);
+        todo.time = timeController.text;
       });
   }
 
@@ -249,6 +252,8 @@ class _AddTaskScreenState extends State<AddTaskScreen> {
       setState(() {
         deadlineDate = pickedDate;
         dateController.text = formatter.format(pickedDate).toString();
+        todo.deadLine = pickedDate.toString();
+        todo.formattedDate = dateController.text;
       });
     });
   }
@@ -271,15 +276,28 @@ class _AddTaskScreenState extends State<AddTaskScreen> {
         ctx.read<TaskBloc>().add(
           SaveTaskEvent(
             TodoListModel(
-                deadLine: deadlineDate.toIso8601String(),
+                deadLine: deadlineDate.toString(),
                 task: taskController.text,
                 time: timeController.text,
                 formattedDate: dateController.text
             ),
           ),
         );
+        final deadLine = DateTime(
+          DateTime.parse(todo.deadLine).year,
+          DateTime.parse(todo.deadLine).month,
+          DateTime.parse(todo.deadLine).day,
+          int.parse(todo.time.split(':')[0]),
+          int.parse(todo.time.split(':')[1].split(' ')[0]),
+          0,
+          0,
+          0,
+        );
         Navigator.of(context)
             .pushReplacement(MaterialPageRoute(builder: (_) => HomeScreen()));
+        LocalNotification().showNotification(
+            title: 'Todo Notification', body: taskController.text, time: deadLine);
+
       }
     }
   }

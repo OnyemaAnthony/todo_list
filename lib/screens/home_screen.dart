@@ -1,4 +1,3 @@
-
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -31,12 +30,12 @@ class _HomeScreenState extends State<HomeScreen> {
         builder: (BuildContext ctx) {
           return Scaffold(
               appBar: AppBar(
-                title: Text('Todo List',style: TextStyle(
-                  color: Colors.white
-                ),),
+                title: Text(
+                  'Todo List',
+                  style: TextStyle(color: Colors.white),
+                ),
               ),
               floatingActionButton: FloatingActionButton(
-
                 onPressed: () {
                   Navigator.of(context).pushReplacement(
                     MaterialPageRoute(
@@ -44,7 +43,10 @@ class _HomeScreenState extends State<HomeScreen> {
                     ),
                   );
                 },
-                child: Icon(Icons.add,color: Colors.white,),
+                child: Icon(
+                  Icons.add,
+                  color: Colors.white,
+                ),
               ),
               body: BlocBuilder<TaskBloc, TaskState>(
                 builder: (context, state) {
@@ -71,37 +73,28 @@ class _HomeScreenState extends State<HomeScreen> {
         itemCount: tasks.length,
         itemBuilder: (context, index) {
           TodoListModel todo = tasks[index];
-//          print(todo.time.split(':')[0]);
-//          print(todo.deadLine);
-//          final deadLine = DateTime(
-//              DateTime.parse(todo.deadLine).year,
-//              DateTime.parse(todo.deadLine).month,
-//              DateTime.parse(todo.deadLine).day,
-//              DateTime.parse(todo.deadLine).hour,
-//              DateTime.parse(todo.deadLine).minute,
-//
-//
-//              int.parse(todo.time.split(':')[0]),
-//              int.parse(todo.time.split(':')[1].split(' ')[0]),
-//              DateTime.parse(todo.deadLine).second);
-          final deadLine = DateTime.parse(todo.deadLine);
-          print('the date is $deadLine');
-          print('equal ${DateTime.now().compareTo(deadLine)== 0}');
-          print('smaller ${DateTime.now().compareTo(deadLine)< 0}');
-          print('bigger ${DateTime.now().compareTo(deadLine)> 0}');
+          final dateNow = DateTime(
+            DateTime.now().year,
+            DateTime.now().month,
+            DateTime.now().day,
+            DateTime.now().hour,
+            DateTime.now().minute,
+            0,
+            0,
+            0,
+          );
+          final deadLine = DateTime(
+            DateTime.parse(todo.deadLine).year,
+            DateTime.parse(todo.deadLine).month,
+            DateTime.parse(todo.deadLine).day,
+            int.parse(todo.time.split(':')[0]),
+            int.parse(todo.time.split(':')[1].split(' ')[0]),
+            0,
+            0,
+            0,
+          );
 
-         // print('hello'+DateTime.now().difference(deadLine).toString());
-          // 
-          if(DateTime.now().isAtSameMomentAs(deadLine)){
 
-           Utility.showLongErrorToast('its time');
-
-            LocalNotification().showNotification(
-                title: 'Todo Notification',
-                body: todo.task,
-                time:deadLine );
-
-          }
 
           return Container(
             padding: const EdgeInsets.all(12.0),
@@ -153,20 +146,19 @@ class _HomeScreenState extends State<HomeScreen> {
                         padding: EdgeInsets.only(left: 13),
                         child: Row(
                           children: [
-                            
-                            DateTime.now().isAfter(deadLine)
+                            dateNow.isBefore(deadLine)
                                 ? Icon(Icons.timer)
                                 : Icon(Icons.timer),
                             SizedBox(
                               width: 15,
                             ),
-                            DateTime.now().isAfter(deadLine)
+                            dateNow.isBefore(deadLine)
                                 ? Text(
                                     '${todo.deadLine.split(':')[0].split(' ')[0]}, ${todo.time}')
                                 : Text(
                                     '${todo.deadLine.split(':')[0].split(' ')[0]}, ${todo.time}',
                                     style: TextStyle(
-                                        color: Colors.red,
+                                        color: Colors.red.shade900,
                                         decoration: TextDecoration.lineThrough),
                                   ),
                           ],
@@ -194,7 +186,6 @@ class _HomeScreenState extends State<HomeScreen> {
       onPressed: () async {
         DatabaseRepository().deleteTask(todo.id);
         setState(() {
-
           tasks.remove(todo);
         });
 

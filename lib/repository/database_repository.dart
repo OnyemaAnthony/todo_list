@@ -16,7 +16,7 @@ class DatabaseRepository {
     var dbClient = await SqfLiteReference().db;
 
     var result = await dbClient.rawQuery(
-      "SELECT * FROM ${Utility.todoTable}",
+      "SELECT * FROM ${Utility.todoTable}"
 
     );
     return result.toList().map((todo) => TodoListModel.fromMap(todo)).toList();
