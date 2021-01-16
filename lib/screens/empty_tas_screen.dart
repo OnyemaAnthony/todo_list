@@ -6,14 +6,13 @@ import 'add_task_screen.dart';
 class EmptyTaskScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    Size deviceSize = MediaQuery.of(context).size;
     return Scaffold(
-      appBar: AppBar(
-        title: Text('Your task',style: TextStyle(
-          color: Colors.white
-        ),),
-        centerTitle: true,
-      ),
+//      appBar: AppBar(
+//        title: Text('Your task',style: TextStyle(
+//          color: Colors.white
+//        ),),
+//        centerTitle: true,
+//      ),
       floatingActionButton: FloatingActionButton(
         onPressed: () {
           Navigator.of(context).pushReplacement(
@@ -31,17 +30,20 @@ class EmptyTaskScreen extends StatelessWidget {
           children: <Widget>[
             Image.asset(
               "assets/images/empty_task.png",
-              height:deviceSize.height *0.29,
-              width: deviceSize.width * 0.29 ,
+                height: 100,
+                width: 100,
             ),
             SizedBox(height: 8.0, width: 8.0),
             Text(
-              "You don't have any task yet",
+              "You don't have any Todo yet",
               style: Theme.of(context).textTheme.title,
             ),
             Text(
-              "Click here to add a new task",
-              style: Theme.of(context).textTheme.caption,
+              "Click here to add a new Todo ",
+            //style: Theme.of(context).textTheme.caption,
+              style: TextStyle(
+                color: Colors.black
+              ),
             ),
             SizedBox(height: 16.0, width: 16.0),
           ],

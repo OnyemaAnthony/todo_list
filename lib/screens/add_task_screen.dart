@@ -272,6 +272,7 @@ class _AddTaskScreenState extends State<AddTaskScreen> {
 
         Navigator.of(context)
             .pushReplacement(MaterialPageRoute(builder: (_) => HomeScreen()));
+        Utility.showToast('Todo Updated');
       } else {
         ctx.read<TaskBloc>().add(
           SaveTaskEvent(
@@ -297,6 +298,7 @@ class _AddTaskScreenState extends State<AddTaskScreen> {
             .pushReplacement(MaterialPageRoute(builder: (_) => HomeScreen()));
         LocalNotification().showNotification(
             title: 'Todo Notification', body: taskController.text, time: deadLine);
+        Utility.showToast('Todo added');
 
       }
     }

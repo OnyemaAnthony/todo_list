@@ -9,7 +9,7 @@ class Utility {
   static String deadLineTime = 'time';
   static String formattedDate = 'formattedDate';
 
-  static void showLongErrorToast(String msg) {
+  static void showToast(String msg) {
     Fluttertoast.showToast(
       msg: msg,
       toastLength: Toast.LENGTH_SHORT,
