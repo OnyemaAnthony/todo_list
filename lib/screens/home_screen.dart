@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-
 import 'add_task_screen.dart';
 import 'empty_tas_screen.dart';
 import 'package:todo_list/bloc/task/task_bloc.dart';
@@ -8,7 +7,6 @@ import 'package:todo_list/models/todo_list_model.dart';
 import 'package:todo_list/repository/database_repository.dart';
 import 'package:todo_list/screens/add_task_screen.dart';
 import 'package:todo_list/screens/empty_tas_screen.dart';
-import 'package:todo_list/services/services.dart';
 import 'package:todo_list/utility/utilities.dart';
 
 class HomeScreen extends StatefulWidget {
@@ -93,8 +91,6 @@ class _HomeScreenState extends State<HomeScreen> {
             0,
             0,
           );
-
-
 
           return Container(
             padding: const EdgeInsets.all(12.0),

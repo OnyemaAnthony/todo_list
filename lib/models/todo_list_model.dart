@@ -1,6 +1,5 @@
-import 'package:equatable/equatable.dart';
 
-class TodoListModel extends Equatable {
+class TodoListModel {
   String task;
   String deadLine;
   String time;
@@ -36,9 +35,4 @@ class TodoListModel extends Equatable {
     this.formattedDate = map['formattedDate'];
   }
 
-  @override
-  String toString() => '[id: $id, task: $task, deadLine: $deadLine]';
-
-  @override
-  List<Object> get props => [task, deadLine, id];
 }

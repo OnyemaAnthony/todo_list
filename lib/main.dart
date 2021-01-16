@@ -1,4 +1,3 @@
-
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -16,15 +15,13 @@ void main() async {
   Bloc.observer = SimpleBlocObserver();
   SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]);
 
-
   runApp(BlocProvider(
-      create: (BuildContext context)=>TaskBloc(repository: DatabaseRepository())..add(GetCountEvent()),
+      create: (BuildContext context) =>
+          TaskBloc(repository: DatabaseRepository())..add(GetCountEvent()),
       child: MyApp()));
 }
 
-
 class MyApp extends StatefulWidget {
-
   @override
   _MyAppState createState() => _MyAppState();
 }
@@ -37,25 +34,20 @@ class _MyAppState extends State<MyApp> {
       title: 'Todo List',
       theme: ThemeData(
         primarySwatch: Colors.orange,
-        textTheme:TextTheme(
-          caption: TextStyle(
-            color: Colors.white
-          )
-        ) ,
+        textTheme: TextTheme(caption: TextStyle(color: Colors.white)),
       ),
-     home: BlocBuilder<TaskBloc,TaskState>(
-       builder: (context,state){
-         if(state is TaskLoadingState){
-           //return Utility.showCirclarLoader();
-         }else if(state is CountLoadedState){
-          return state.count <=0 ? EmptyTaskScreen(): HomeScreen();
-         }else if(state is TaskErrorState){
-           return Utility.showErrorMessage(state.message);
-         }
-         return Container();
-
-       },
-     ),
+      home: BlocBuilder<TaskBloc, TaskState>(
+        builder: (context, state) {
+          if (state is TaskLoadingState) {
+            //return Utility.showCirclarLoader();
+          } else if (state is CountLoadedState) {
+            return state.count <= 0 ? EmptyTaskScreen() : HomeScreen();
+          } else if (state is TaskErrorState) {
+            return Utility.showErrorMessage(state.message);
+          }
+          return Container();
+        },
+      ),
     );
   }
 }

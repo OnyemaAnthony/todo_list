@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 
 import 'add_task_screen.dart';
-//import 'package:todo_list/screens/add_task_screen.dart';
 
 class EmptyTaskScreen extends StatelessWidget {
   @override
