@@ -6,12 +6,12 @@ class EmptyTaskScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-//      appBar: AppBar(
-//        title: Text('Your task',style: TextStyle(
-//          color: Colors.white
-//        ),),
-//        centerTitle: true,
-//      ),
+     appBar: AppBar(
+       title: Text('Your task',style: TextStyle(
+         color: Colors.white
+       ),),
+       centerTitle: true,
+     ),
       floatingActionButton: FloatingActionButton(
         onPressed: () {
           Navigator.of(context).pushReplacement(

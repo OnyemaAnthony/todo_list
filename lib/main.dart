@@ -34,7 +34,7 @@ class _MyAppState extends State<MyApp> {
       title: 'Todo List',
       theme: ThemeData(
         primarySwatch: Colors.orange,
-        textTheme: TextTheme(caption: TextStyle(color: Colors.white)),
+        textTheme: TextTheme(caption: TextStyle(color: Colors.white,),),
       ),
       home: BlocBuilder<TaskBloc, TaskState>(
         builder: (context, state) {

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:todo_list/screens/navigation_drawer.dart';
 import 'add_task_screen.dart';
 import 'empty_tas_screen.dart';
 import 'package:todo_list/bloc/task/task_bloc.dart';
@@ -27,6 +28,7 @@ class _HomeScreenState extends State<HomeScreen> {
       child: Builder(
         builder: (BuildContext ctx) {
           return Scaffold(
+            drawer: NavigationDrawer(),
               appBar: AppBar(
                 title: Text(
                   'Todo List',
