@@ -18,7 +18,6 @@ class _NavigationDrawerState extends State<NavigationDrawer> {
   }
 
   final String playStoreURL = 'https://play.google.com/store/apps/details?id=com.onyema.tony.todo_list';
- // final String playStoreURL = 'https://apps.apple.com/app/id1518200433';
 
   @override
   void initState() {
@@ -55,6 +54,22 @@ class _NavigationDrawerState extends State<NavigationDrawer> {
             FlutterOpenWhatsapp.sendSingleMessage('+2349032627367', 'hello');
           }),
           buildDrawer('About', Icons.info, () {
+            return AboutListTile(
+              // applicationIcon: FlutterLogo(),
+              // icon: FlutterLogo(),
+              aboutBoxChildren: <Widget>[
+                SizedBox(
+                  height: 10.0,
+                ),
+                Text(
+                  "Todo list",
+                ),
+              ],
+              applicationName: 'Todo List',
+              applicationVersion: "1.0.1",
+              applicationLegalese: "Apache License 2.0",
+            );
+
             // return AboutDialog(
             //   applicationName: 'Todo List',
             //   applicationVersion: '$version',
@@ -65,6 +80,7 @@ class _NavigationDrawerState extends State<NavigationDrawer> {
       ),
     );
   }
+
 
 
 
