@@ -17,7 +17,8 @@ class _NavigationDrawerState extends State<NavigationDrawer> {
     return ListTile(leading: Icon(icon), title: Text(title), onTap: controller);
   }
 
-  final String playStoreURL = 'https://play.google.com/store/apps/details?id=com.onyema.tony.todo_list';
+  final String playStoreURL =
+      'https://play.google.com/store/apps/details?id=com.onyema.tony.todo_list';
 
   @override
   void initState() {
@@ -31,8 +32,9 @@ class _NavigationDrawerState extends State<NavigationDrawer> {
       child: Column(
         children: <Widget>[
           Container(
+            //padding: EdgeInsets.all(50),
             color: Colors.orange,
-            height: 200,
+            height: 180,
             width: double.infinity,
 
             child: Image.asset(
@@ -46,43 +48,29 @@ class _NavigationDrawerState extends State<NavigationDrawer> {
               Share.share('Hello check out this awesome todo list application');
             }),
           ),
-          buildDrawer('Check for updates', Icons.update, () async{
-            await canLaunch(playStoreURL) ? await launch(playStoreURL) : throw 'Could not launch $playStoreURL';
-
+          buildDrawer('Check for updates', Icons.update, () async {
+            await canLaunch(playStoreURL)
+                ? await launch(playStoreURL)
+                : throw 'Could not launch $playStoreURL';
           }),
           buildDrawer('Contact us', FontAwesomeIcons.whatsapp, () {
             FlutterOpenWhatsapp.sendSingleMessage('+2349032627367', 'hello');
           }),
-          buildDrawer('About', Icons.info, () {
-            return AboutListTile(
-              // applicationIcon: FlutterLogo(),
-              // icon: FlutterLogo(),
-              aboutBoxChildren: <Widget>[
-                SizedBox(
-                  height: 10.0,
-                ),
-                Text(
-                  "Todo list",
-                ),
-              ],
-              applicationName: 'Todo List',
-              applicationVersion: "1.0.1",
-              applicationLegalese: "Apache License 2.0",
-            );
-
-            // return AboutDialog(
-            //   applicationName: 'Todo List',
-            //   applicationVersion: '$version',
-            //   applicationIcon: Image.asset('assets/images/ic_launcher.png'),
-            // );
-          }),
+          AboutListTile(
+            applicationIcon: Container(
+              width: 50,
+              height: 50,
+              child: Image.asset('assets/images/ic_launcher.png'),
+            ),
+            icon: Icon((Icons.info)),
+            aboutBoxChildren: <Widget>[],
+            applicationVersion: version,
+            applicationLegalese: "Apache License 2.0",
+          ),
         ],
       ),
     );
   }
-
-
-
 
   Future getVersion() async {
     PackageInfo packageInfo = await PackageInfo.fromPlatform();
@@ -92,4 +80,3 @@ class _NavigationDrawerState extends State<NavigationDrawer> {
     });
   }
 }
-
