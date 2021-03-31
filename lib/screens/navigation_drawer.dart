@@ -3,6 +3,7 @@ import 'package:flutter_open_whatsapp/flutter_open_whatsapp.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:share/share.dart';
 import 'package:package_info/package_info.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class NavigationDrawer extends StatefulWidget {
   @override
@@ -15,6 +16,9 @@ class _NavigationDrawerState extends State<NavigationDrawer> {
   Widget buildDrawer(String title, IconData icon, Function controller) {
     return ListTile(leading: Icon(icon), title: Text(title), onTap: controller);
   }
+
+  final String playStoreURL = 'https://play.google.com/store/apps/details?id=com.onyema.tony.todo_list';
+ // final String playStoreURL = 'https://apps.apple.com/app/id1518200433';
 
   @override
   void initState() {
@@ -29,13 +33,13 @@ class _NavigationDrawerState extends State<NavigationDrawer> {
         children: <Widget>[
           Container(
             color: Colors.orange,
-            height: 150,
+            height: 200,
             width: double.infinity,
 
-            // child: Image.asset(
-            //   'assets/images/todo_list.png',
-            // //  fit: BoxFit.fill,
-            // ),
+            child: Image.asset(
+              'assets/images/ic_launcher.png',
+              fit: BoxFit.fill,
+            ),
           ),
           Container(
             margin: EdgeInsets.only(top: 10),
@@ -43,7 +47,10 @@ class _NavigationDrawerState extends State<NavigationDrawer> {
               Share.share('Hello check out this awesome todo list application');
             }),
           ),
-          buildDrawer('Check for updates', Icons.update, () {}),
+          buildDrawer('Check for updates', Icons.update, () async{
+            await canLaunch(playStoreURL) ? await launch(playStoreURL) : throw 'Could not launch $playStoreURL';
+
+          }),
           buildDrawer('Contact us', FontAwesomeIcons.whatsapp, () {
             FlutterOpenWhatsapp.sendSingleMessage('+2349032627367', 'hello');
           }),
@@ -59,6 +66,8 @@ class _NavigationDrawerState extends State<NavigationDrawer> {
     );
   }
 
+
+
   Future getVersion() async {
     PackageInfo packageInfo = await PackageInfo.fromPlatform();
     String version = packageInfo.version;
@@ -67,3 +76,4 @@ class _NavigationDrawerState extends State<NavigationDrawer> {
     });
   }
 }
+

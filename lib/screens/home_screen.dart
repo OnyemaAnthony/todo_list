@@ -151,8 +151,7 @@ class _HomeScreenState extends State<HomeScreen> {
                               width: 15,
                             ),
                             dateNow.isBefore(deadLine)
-                                ? Text(
-                                    '${todo.deadLine.split(':')[0].split(' ')[0]}, ${todo.time}')
+                                ?Text("")
                                 : Text(
                                     '${todo.deadLine.split(':')[0].split(' ')[0]}, ${todo.time}',
                                     style: TextStyle(

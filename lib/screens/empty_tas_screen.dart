@@ -49,6 +49,7 @@ class EmptyTaskScreen extends StatelessWidget {
         ),
       ),
     );
-    ;
+
+
   }
 }

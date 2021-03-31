@@ -35,6 +35,7 @@ dependencies:
   flutter_open_whatsapp: ^0.1.2
   share: ^0.6.5+4
   package_info: ^0.4.3+4
+  url_launcher: ^6.0.3
 
 dev_dependencies:
   flutter_test:
